@@ -8,8 +8,6 @@
       {% for subsection in section.children %}
       <h2>{{ subsection.title }}</h2>
       <div>{{ subsection.content }}</div>
-      {% endfor %}
-    {% endfor %}
   </body>
 </html>
 {% endautoescape %}

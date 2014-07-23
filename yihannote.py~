@@ -32,7 +32,7 @@ def generate_hierarchy(entries):
         else:
             root_nodes.append(key_lookup[entry.key])
     for k,node in key_lookup.items():
-        node.children.sort(key=lambda x:x.child_index)
+        self.children.sort(key=lambda x:x.child_index)
     return root_nodes
         
 
