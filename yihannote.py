@@ -1,3 +1,5 @@
+import logging
+import json
 import os
 import urllib
 
@@ -14,8 +16,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 class ContentTree:
-    def __init__(self, title, content, is_equation, child_index):
+    def __init__(self, title, key, content, is_equation, child_index):
         self.children = []
+        self.key = key
         self.title = title
         self.content = content
         self.is_equation = is_equation
@@ -24,7 +27,8 @@ class ContentTree:
 def generate_hierarchy(entries):
     key_lookup = {}
     for entry in entries:
-        key_lookup[entry.key] = ContentTree(entry.title, entry.content, entry.is_equation, entry.child_index)
+        key_lookup[entry.key] = ContentTree(entry.title, entry.key, entry.content,
+                                            entry.is_equation, entry.child_index)
     root_nodes = []
     for entry in entries:
         if entry.parent_key:
@@ -34,7 +38,6 @@ def generate_hierarchy(entries):
     for k,node in key_lookup.items():
         node.children.sort(key=lambda x:x.child_index)
     return root_nodes
-        
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -45,7 +48,23 @@ class MainPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))
 
+class NodeInfo(webapp2.RequestHandler):
+    def get(self):
+        key = self.request.get('key')
+        logging.info(key)
+        object = datastore.get_entries([key])[0]
+        json_object = {
+            'key':object.key, 
+            'parent_key':object.parent_key, 
+            'title':object.title,
+            'content':object.content, 
+            'child_index':object.child_index, 
+            'is_equation':object.is_equation
+        }
+        self.response.write(json.dumps(json_object))
+
 application = webapp2.WSGIApplication([
     ('/', MainPage),
+    ('/NodeInfo', NodeInfo),
 ], debug=True)
 

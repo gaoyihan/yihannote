@@ -3,17 +3,37 @@
 <html>
   <head>
     <title>Deposit Note</title>
-    <script type="text/javascript" src="yihannote.js" async></script>
+    <script type="text/javascript" src="javascripts/yihannote.js" async></script>
+    <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
   </head>
   <body>
-    {% for section in sections %}
-    <h1>{{ section.title }}</h1>
-    <div>{{ section.content }}</div>
-      {% for subsection in section.children %}
-      <h2>{{ subsection.title }}</h2>
-      <div>{{ subsection.content }}</div>
+    <button onclick="yihannote.changeMode()" id="edit/view button">Edit</button>
+    <div id="note body">
+      {% for section in sections %}
+      <div id="{{ section.key }}">
+        {% if section.title %}
+          <h1 class="title">{{ section.title }}</h1>
+        {% endif %}
+        {% if section.is_equation %}
+          <div lang="latex" class="equation">{{ section.content }}</div>
+        {% else %}
+          <div class="content">{{ section.content }}</div>
+        {% endif %}
+        {% for subsection in section.children %}
+        <div id="{{ subsection.key }}">
+          {% if subsection.title %}
+            <h2 class="title">{{ subsection.title }}</h2>
+          {% endif %}
+         {% if subsection.is_equation %}
+            <div lang="latex" class="equation">{{ subsection.content }}</div>
+          {% else %}
+            <div class="content">{{ subsection.content }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
       {% endfor %}
-    {% endfor %}
+    </div>
   </body>
 </html>
 {% endautoescape %}
