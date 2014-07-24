@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+import logging
 
 class Entry:
     def __init__(self, key, parent_key, title, content, has_child, child_index, is_equation):
@@ -34,3 +35,8 @@ def get_all_test_entries():
     entry4 = Entry('Sec 1.2', 'Sec 1', 'Second Subsection', 'second subsection content', False, 2, False)
     return [entry1, entry2, entry3, entry4]
 
+def delete_entries(entry_keys):
+    pass
+    
+def add_entries(entries):
+    pass
