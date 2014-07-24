@@ -3,11 +3,25 @@
 <html>
   <head>
     <title>Deposit Note</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <script type="text/javascript" src="javascripts/yihannote.js" async></script>
     <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
   </head>
   <body>
     <button onclick="yihannote.changeMode()" id="edit/view button">Edit</button>
+    <div id="editForm" class="hidden">
+      <form action="/Edit" method="post">
+        <input type="text" name="key" id="editFormKey" placeholder="Key"/>
+        <input type="text" name="parent_key" id="editFormParentKey" placeholder="Parent Key"/>
+        <input type="text" name="title" id="editFormTitle" placeholder="Title"/>
+        <input type="text" name="content" id="editFormContent" placeholder="Content"/>
+        <input type="text" name="child_index" id="editFormChildIndex" placeholder="Child Index"/>
+        Is Equation:
+        <input type="radio" name="is_equation" id="editFormIsEquationTrue" value="True"/>True
+        <input type="radio" name="is_equation" id="editFormIsEquationFalse" value="False"/>False
+        <input type="submit" value="Submit">
+      </form>
+    </div>
     <div id="note body">
       {% for section in sections %}
       <div id="{{ section.key }}">
@@ -24,7 +38,7 @@
           {% if subsection.title %}
             <h2 class="title">{{ subsection.title }}</h2>
           {% endif %}
-         {% if subsection.is_equation %}
+          {% if subsection.is_equation %}
             <div lang="latex" class="equation">{{ subsection.content }}</div>
           {% else %}
             <div class="content">{{ subsection.content }}</div>

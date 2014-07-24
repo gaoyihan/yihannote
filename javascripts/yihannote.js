@@ -25,6 +25,19 @@ yihannote.onNoteBodyClick = function(event) {
     var ajaxResponseHandler = function() {
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
+            var editForm = document.getElementById('editForm');
+            console.log(editForm);
+            editForm.className = '';
+            document.getElementById('editFormKey').value = response.key;
+            document.getElementById('editFormParentKey').value = response.parent_key;
+            document.getElementById('editFormTitle').value = response.title;
+            document.getElementById('editFormContent').value = response.content; 
+            document.getElementById('editFormChildIndex').value = response.child_index;
+            if (response.is_equation) {
+                document.getElementById('editFormIsEquationTrue').checked = true;
+            } else {
+                document.getElementById('editFormIsEquationFalse').checked = true;
+            }
             console.log(response.key, response.title, response.content, response.is_equation);
         }
     };

@@ -36,7 +36,7 @@ def get_all_test_entries():
     return [entry1, entry2, entry3, entry4, entry5, entry6]
 
 def get_entries(entry_keys):
-    return [Entry(entry_keys[0], 'test_parent', 'test_title', 'test_content', 1, False)]
+    return [Entry(entry_keys[0], 'test_parent', 'test_title', 'test_content', 1, True)]
 
 def delete_entries(entry_keys):
     pass

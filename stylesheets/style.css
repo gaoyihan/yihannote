@@ -1,0 +1,14 @@
+.hidden {
+  display: none;
+}
+
+div#editForm {
+  left: 30%;
+  top: 20%;
+  width: 40%;
+  position: fixed;
+}
+
+div#editForm input[type=text] {
+  display: block;
+}
