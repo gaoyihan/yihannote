@@ -7,8 +7,8 @@
     <script type="text/javascript" src="javascripts/yihannote.js" async></script>
     <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
   </head>
-  <body>
-    <button onclick="yihannote.changeMode()" id="edit/view button">Edit</button>
+  <body onkeydown="yihannote.onKeyDown(event)">
+    <button onclick="yihannote.onEditViewButtonClick()" id="edit/view button">Edit</button>
     <div id="editFormBackground" onclick="yihannote.onEditFormBackgroundClick(event)" class="hidden">
       <div id="editForm">
         <form action="/EditEntry" method="post">

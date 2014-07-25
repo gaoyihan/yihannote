@@ -2,17 +2,32 @@ var yihannote = {};
 
 yihannote.mode = 'view';
 
-yihannote.changeMode = function() {
+yihannote.changeMode = function(mode) {
     var button = document.getElementById('edit/view button');
     var noteBody = document.getElementById('note body');
-    if (yihannote.mode === 'view') {
+    if (mode === 'edit') {
         yihannote.mode = 'edit';
         button.textContent = 'View';
         noteBody.addEventListener('click', yihannote.onNoteBodyClick, false);
-    } else {
+        document.getElementById('editFormBackground').className = 'hidden';
+    } else if (mode === 'view') {
         yihannote.mode = 'view';
         button.textContent = 'Edit';
         noteBody.removeEventListener('click', yihannote.onNoteBodyClick);
+        document.getElementById('editFormBackground').className = 'hidden';
+    } else if (mode === 'inEdit') {
+        yihannote.mode = 'inEdit';
+        button.textContent = 'View';
+        noteBody.removeEventListener('click', yihannote.onNoteBodyClick);
+        document.getElementById('editFormBackground').className = '';
+    }
+};
+
+yihannote.onEditViewButtonClick = function() {
+    if (yihannote.mode === 'view') {
+        yihannote.changeMode('edit');
+    } else if (yihannote.mode === 'edit') {
+        yihannote.changeMode('view');
     }
 };
 
@@ -23,8 +38,8 @@ yihannote.onNoteBodyClick = function(event) {
     }
     var ajaxResponseHandler = function() {
         if (this.readyState == 4 && this.status == 200) {
+            yihannote.changeMode('inEdit');
             var response = JSON.parse(this.responseText);
-            document.getElementById('editFormBackground').className = '';
             document.getElementById('editFormKey').value = response.key;
             document.getElementById('editFormParentKey').value = response.parent_key;
             document.getElementById('editFormTitle').value = response.title;
@@ -44,8 +59,18 @@ yihannote.onNoteBodyClick = function(event) {
     req.send();
 };
 
+yihannote.onKeyDown = function(event) {
+    if (event.keyCode === 27) {
+        if (yihannote.mode === 'inEdit') {
+            yihannote.changeMode('edit');
+        } else if (yihannote.mode === 'edit') {
+            yihannote.changeMode('view');
+        }
+    }
+};
+
 yihannote.onEditFormBackgroundClick = function(event) {
     if (event.target.id === 'editFormBackground') {
-        event.target.className = 'hidden';
+        yihannote.changeMode('edit');
     }
 };

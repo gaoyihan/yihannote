@@ -41,7 +41,7 @@ def generate_hierarchy(entries):
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
-        entries = datastore.get_all_test_entries()
+        entries = datastore.get_all_entries()
         template_values = {
             'sections': generate_hierarchy(entries)
         }
@@ -70,9 +70,9 @@ class EditEntry(webapp2.RequestHandler):
         title = self.request.get('title')
         content = self.request.get('content')
         child_index = int(self.request.get('child_index'))
-        is_equation = bool(self.request.get('is_equation'))
-        logging.info('Edit Request {} {} {} {} {} {}'.format(
-                     key, parent_key, title, content, child_index, is_equation))
+        is_equation = self.request.get('is_equation') == 'True'
+        entry = datastore.Entry(key, parent_key, title, content, child_index, is_equation)
+	datastore.add_entries([entry])
         self.redirect('/')
 
 application = webapp2.WSGIApplication([
@@ -81,3 +81,4 @@ application = webapp2.WSGIApplication([
     ('/EditEntry', EditEntry),
 ], debug=True)
 
+datastore.create_test_entries()
