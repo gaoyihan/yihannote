@@ -9,23 +9,25 @@
   </head>
   <body>
     <button onclick="yihannote.changeMode()" id="edit/view button">Edit</button>
-    <div id="editForm" class="hidden">
-      <form action="/Edit" method="post">
-		Key:
-        <input type="text" name="key" id="editFormKey" placeholder="Key"/>
-		Parent Key:
-        <input type="text" name="parent_key" id="editFormParentKey" placeholder="Parent Key"/>
-		Title:
-        <input type="text" name="title" id="editFormTitle" placeholder="Title"/>
-		Content:
-        <input type="text" name="content" id="editFormContent" placeholder="Content"/>
-		Child Index:
-        <input type="text" name="child_index" id="editFormChildIndex" placeholder="Child Index"/>
-        Is Equation:
-        <input type="radio" name="is_equation" id="editFormIsEquationTrue" value="True"/>True
-        <input type="radio" name="is_equation" id="editFormIsEquationFalse" value="False"/>False
-        <input type="submit" value="Submit">
-      </form>
+    <div id="editFormBackground" onclick="yihannote.onEditFormBackgroundClick(event)" class="hidden">
+      <div id="editForm">
+        <form action="/Edit" method="post">
+          Key:
+          <input type="text" name="key" id="editFormKey" placeholder="Key"/>
+          Parent Key:
+          <input type="text" name="parent_key" id="editFormParentKey" placeholder="Parent Key"/>
+          Title:
+          <input type="text" name="title" id="editFormTitle" placeholder="Title"/>
+          Content:
+          <input type="text" name="content" id="editFormContent" placeholder="Content"/>
+          Child Index:
+          <input type="text" name="child_index" id="editFormChildIndex" placeholder="Child Index"/>
+          Is Equation:
+          <input type="radio" name="is_equation" id="editFormIsEquationTrue" value="True"/>True
+          <input type="radio" name="is_equation" id="editFormIsEquationFalse" value="False"/>False
+          <input type="submit" value="Submit">
+        </form>
+      </div>
     </div>
     <div id="note body">
       {% for section in sections %}

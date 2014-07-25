@@ -21,13 +21,10 @@ yihannote.onNoteBodyClick = function(event) {
     while (!targetNode.id) {
         targetNode = targetNode.parentNode;
     }
-    console.log(targetNode.id);
     var ajaxResponseHandler = function() {
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
-            var editForm = document.getElementById('editForm');
-            console.log(editForm);
-            editForm.className = '';
+            document.getElementById('editFormBackground').className = '';
             document.getElementById('editFormKey').value = response.key;
             document.getElementById('editFormParentKey').value = response.parent_key;
             document.getElementById('editFormTitle').value = response.title;
@@ -38,7 +35,6 @@ yihannote.onNoteBodyClick = function(event) {
             } else {
                 document.getElementById('editFormIsEquationFalse').checked = true;
             }
-            console.log(response.key, response.title, response.content, response.is_equation);
         }
     };
     
@@ -48,4 +44,8 @@ yihannote.onNoteBodyClick = function(event) {
     req.send();
 };
 
-
+yihannote.onEditFormBackgroundClick = function(event) {
+    if (event.target.id === 'editFormBackground') {
+        event.target.className = 'hidden';
+    }
+};
