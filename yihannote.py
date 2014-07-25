@@ -51,7 +51,7 @@ class MainPage(webapp2.RequestHandler):
 class NodeInfo(webapp2.RequestHandler):
     def get(self):
         key = self.request.get('key')
-        logging.info(key)
+        logging.info('Request NodeInfo Key=' + key)
         object = datastore.get_entries([key])[0]
         json_object = {
             'key':object.key, 
@@ -62,9 +62,22 @@ class NodeInfo(webapp2.RequestHandler):
             'is_equation':object.is_equation
         }
         self.response.write(json.dumps(json_object))
+        
+class EditEntry(webapp2.RequestHandler):
+    def post(self):
+        key = self.request.get('key')
+        parent_key = self.request.get('parent_key')
+        title = self.request.get('title')
+        content = self.request.get('content')
+        child_index = int(self.request.get('child_index'))
+        is_equation = bool(self.request.get('is_equation'))
+        logging.info('Edit Request {} {} {} {} {} {}'.format(
+                     key, parent_key, title, content, child_index, is_equation))
+        self.redirect('/')
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/NodeInfo', NodeInfo),
+    ('/EditEntry', EditEntry),
 ], debug=True)
 
