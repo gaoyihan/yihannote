@@ -16,27 +16,27 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 class ContentTree:
-    def __init__(self, title, key, content, is_equation, child_index):
+    def __init__(self, key, content, type, child_index):
         self.children = []
         self.key = key
-        self.title = title
         self.content = content
-        self.is_equation = is_equation
+        self.type = type
         self.child_index = child_index
     
 def generate_hierarchy(entries):
     key_lookup = {}
     for entry in entries:
-        key_lookup[entry.key] = ContentTree(entry.title, entry.key, entry.content,
-                                            entry.is_equation, entry.child_index)
+        key_lookup[entry.key] = ContentTree(entry.key, entry.content,
+                                            entry.type, entry.child_index)
     root_nodes = []
     for entry in entries:
-        if entry.parent_key:
+        if (entry.parent_key) and (entry.parent_key in key_lookup):
             key_lookup[entry.parent_key].children.append(key_lookup[entry.key])
         else:
             root_nodes.append(key_lookup[entry.key])
     for k,node in key_lookup.items():
         node.children.sort(key=lambda x:x.child_index)
+    root_nodes.sort(key=lambda x:x.child_index)
     return root_nodes
 
 class MainPage(webapp2.RequestHandler):
@@ -51,15 +51,13 @@ class MainPage(webapp2.RequestHandler):
 class NodeInfo(webapp2.RequestHandler):
     def get(self):
         key = self.request.get('key')
-        logging.info('Request NodeInfo Key=' + key)
         object = datastore.get_entries([key])[0]
         json_object = {
             'key':object.key, 
             'parent_key':object.parent_key, 
-            'title':object.title,
             'content':object.content, 
-            'child_index':object.child_index, 
-            'is_equation':object.is_equation
+            'child_index':object.child_index,
+            'type':object.type
         }
         self.response.write(json.dumps(json_object))
         
@@ -67,12 +65,11 @@ class EditEntry(webapp2.RequestHandler):
     def post(self):
         key = self.request.get('key')
         parent_key = self.request.get('parent_key')
-        title = self.request.get('title')
         content = self.request.get('content')
         child_index = int(self.request.get('child_index'))
-        is_equation = self.request.get('is_equation') == 'True'
-        entry = datastore.Entry(key, parent_key, title, content, child_index, is_equation)
-	datastore.add_entries([entry])
+        type = self.request.get('type')
+        entry = datastore.Entry(key, parent_key, content, type, child_index)
+        datastore.add_or_update_entries([entry])
         self.redirect('/')
 
 application = webapp2.WSGIApplication([

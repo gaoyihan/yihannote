@@ -9,47 +9,63 @@
   </head>
   <body onkeydown="yihannote.onKeyDown(event)">
     <button onclick="yihannote.onEditViewButtonClick()" id="edit/view button">Edit</button>
-    <div id="editFormBackground" onclick="yihannote.onEditFormBackgroundClick(event)" class="hidden">
+    <div id="editFormContainer" onclick="yihannote.onEditFormBackgroundClick(event)" class="hidden">  
+      <div id="editFormBackground">
+      </div>
       <div id="editForm">
         <form action="/EditEntry" method="post">
           Key:
           <input type="text" name="key" id="editFormKey" placeholder="Key"/>
           Parent Key:
           <input type="text" name="parent_key" id="editFormParentKey" placeholder="Parent Key"/>
-          Title:
-          <input type="text" name="title" id="editFormTitle" placeholder="Title"/>
           Content:
           <input type="text" name="content" id="editFormContent" placeholder="Content"/>
           Child Index:
           <input type="text" name="child_index" id="editFormChildIndex" placeholder="Child Index"/>
-          Is Equation:
-          <input type="radio" name="is_equation" id="editFormIsEquationTrue" value="True"/>True
-          <input type="radio" name="is_equation" id="editFormIsEquationFalse" value="False"/>False
+          Type:
+          <input type="radio" name="type" id="editFormTypeTitle" value="title"/>Title
+          <input type="radio" name="type" id="editFormTypeEquation" value="equation"/>Equation
+          <input type="radio" name="type" id="editFormTypeParagraph" value="paragraph"/>Paragraph
           <input type="submit" value="Submit">
         </form>
       </div>
     </div>
     <div id="note body">
       {% for section in sections %}
-      <div id="{{ section.key }}">
-        {% if section.title %}
-          <h1 class="title">{{ section.title }}</h1>
+      <div id="{{ section.key }}" class="section">
+        {% if section.type == "title" %}
+          <h1 class="title">{{ section.content }}</h1>
         {% endif %}
-        {% if section.is_equation %}
+        {% if section.type == "equation" %}
           <div lang="latex" class="equation">{{ section.content }}</div>
-        {% else %}
-          <div class="content">{{ section.content }}</div>
+        {% endif %}
+        {% if section.type == "paragraph" %}
+          <div class="paragraph">{{ section.content }}</div>
         {% endif %}
         {% for subsection in section.children %}
-        <div id="{{ subsection.key }}">
-          {% if subsection.title %}
-            <h2 class="title">{{ subsection.title }}</h2>
+        <div id="{{ subsection.key }}" class="section">
+          {% if subsection.type == "title" %}
+            <h2 class="title">{{ subsection.content }}</h2>
           {% endif %}
-          {% if subsection.is_equation %}
+          {% if subsection.type == "equation" %}
             <div lang="latex" class="equation">{{ subsection.content }}</div>
-          {% else %}
-            <div class="content">{{ subsection.content }}</div>
           {% endif %}
+          {% if subsection.type == "paragraph" %}
+            <div class="paragraph">{{ subsection.content }}</div>
+          {% endif %}
+          {% for subsubsection in subsection.children %}
+          <div id="{{ subsubsection.key }}" class="section">
+            {% if subsubsection.type == "title" %}
+              <h3 class="title">{{ subsubsection.content }}</h3>
+            {% endif %}
+            {% if subsubsection.type == "equation" %}
+              <div lang="latex" class="equation">{{ subsubsection.content }}</div>
+            {% endif %}
+            {% if subsubsection.type == "paragraph" %}
+              <div class="paragraph">{{ subsubsection.content }}</div>
+            {% endif %}
+          </div>
+          {% endfor %}
         </div>
         {% endfor %}
       </div>

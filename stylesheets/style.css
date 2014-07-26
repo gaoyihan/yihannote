@@ -25,3 +25,8 @@ div#editForm {
 div#editForm input[type=text] {
   display: block;
 }
+
+div.editing div.section {
+  margin: 5px 5px 5px 5px;
+  border: 1px solid red;
+}

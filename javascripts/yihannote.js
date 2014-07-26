@@ -5,22 +5,23 @@ yihannote.mode = 'view';
 yihannote.changeMode = function(mode) {
     var button = document.getElementById('edit/view button');
     var noteBody = document.getElementById('note body');
-    if (mode === 'edit') {
-        yihannote.mode = 'edit';
-        button.textContent = 'View';
-        noteBody.addEventListener('click', yihannote.onNoteBodyClick, false);
-        document.getElementById('editFormBackground').className = 'hidden';
-    } else if (mode === 'view') {
-        yihannote.mode = 'view';
+    if (mode === 'view') {
         button.textContent = 'Edit';
+        document.getElementById('note body').className = '';
         noteBody.removeEventListener('click', yihannote.onNoteBodyClick);
         document.getElementById('editFormBackground').className = 'hidden';
-    } else if (mode === 'inEdit') {
-        yihannote.mode = 'inEdit';
+    } else if (mode === 'edit' || mode === 'inEdit') {
         button.textContent = 'View';
-        noteBody.removeEventListener('click', yihannote.onNoteBodyClick);
-        document.getElementById('editFormBackground').className = '';
+        document.getElementById('note body').className = 'editing';
+        if (mode === 'edit') {
+            document.getElementById('editFormContainer').className = 'hidden';
+            noteBody.addEventListener('click', yihannote.onNoteBodyClick);
+        } else {
+            document.getElementById('editFormContainer').className = '';
+            noteBody.removeEventListener('click', yihannote.onNoteBodyClick);
+        }
     }
+    yihannote.mode = mode;
 };
 
 yihannote.onEditViewButtonClick = function() {
@@ -42,13 +43,14 @@ yihannote.onNoteBodyClick = function(event) {
             var response = JSON.parse(this.responseText);
             document.getElementById('editFormKey').value = response.key;
             document.getElementById('editFormParentKey').value = response.parent_key;
-            document.getElementById('editFormTitle').value = response.title;
             document.getElementById('editFormContent').value = response.content; 
             document.getElementById('editFormChildIndex').value = response.child_index;
-            if (response.is_equation) {
-                document.getElementById('editFormIsEquationTrue').checked = true;
-            } else {
-                document.getElementById('editFormIsEquationFalse').checked = true;
+            if (response.type === 'title') {
+                document.getElementById('editFormTypeTitle').checked = true;
+            } else if (response.type === 'equation') {
+                document.getElementById('editFormTypeEquation').checked = true;
+            } else if (response.type === 'paragraph') {
+                document.getElementById('editFormTypeParagraph').checked = true;
             }
         }
     };
