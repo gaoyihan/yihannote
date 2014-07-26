@@ -3,15 +3,12 @@ var yihannote = {};
 yihannote.mode = 'view';
 
 yihannote.changeMode = function(mode) {
-    var button = document.getElementById('edit/view button');
     var noteBody = document.getElementById('note body');
     if (mode === 'view') {
-        button.textContent = 'Edit';
         document.getElementById('note body').className = '';
         noteBody.removeEventListener('click', yihannote.onNoteBodyClick);
         document.getElementById('editFormBackground').className = 'hidden';
     } else if (mode === 'edit' || mode === 'inEdit') {
-        button.textContent = 'View';
         document.getElementById('note body').className = 'editing';
         if (mode === 'edit') {
             document.getElementById('editFormContainer').className = 'hidden';
@@ -22,14 +19,6 @@ yihannote.changeMode = function(mode) {
         }
     }
     yihannote.mode = mode;
-};
-
-yihannote.onEditViewButtonClick = function() {
-    if (yihannote.mode === 'view') {
-        yihannote.changeMode('edit');
-    } else if (yihannote.mode === 'edit') {
-        yihannote.changeMode('view');
-    }
 };
 
 yihannote.onNoteBodyClick = function(event) {
@@ -66,6 +55,8 @@ yihannote.onKeyDown = function(event) {
         if (yihannote.mode === 'inEdit') {
             yihannote.changeMode('edit');
         } else if (yihannote.mode === 'edit') {
+            yihannote.changeMode('view');
+        } else if (yihannote.mode === 'latex') {
             yihannote.changeMode('view');
         }
     }

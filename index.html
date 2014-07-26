@@ -8,7 +8,9 @@
     <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
   </head>
   <body onkeydown="yihannote.onKeyDown(event)">
-    <button onclick="yihannote.onEditViewButtonClick()" id="edit/view button">Edit</button>
+    <button onclick="yihannote.changeMode('view')">View</button>
+    <button onclick="yihannote.changeMode('edit')">Edit</button>
+    <button onclick="yihannote.changeMode('latex')">LaTex</button>
     <div id="editFormContainer" onclick="yihannote.onEditFormBackgroundClick(event)" class="hidden">  
       <div id="editFormBackground">
       </div>
