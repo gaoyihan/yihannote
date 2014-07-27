@@ -11,7 +11,18 @@
     <button onclick="yihannote.changeMode('view')">View</button>
     <button onclick="yihannote.changeMode('edit')">Edit</button>
     <button onclick="yihannote.changeMode('latex')">LaTex</button>
-    <div id="editFormContainer" onclick="yihannote.onEditFormBackgroundClick(event)" class="hidden">  
+    <div id="latexFormContainer" onclick="yihannote.onLatexFormContainerClick(event)" class="hidden">  
+      <div id="latexFormBackground">
+      </div>
+      <div id="latexForm">
+        <form action="/LatexPost" method="post">
+          Latex Content:
+          <input type="text" name="content" id="latexFormContent" placeholder="Key"/>
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+    </div>
+    <div id="editFormContainer" onclick="yihannote.onEditFormContainerClick(event)" class="hidden">  
       <div id="editFormBackground">
       </div>
       <div id="editForm">

@@ -48,6 +48,12 @@ def get_entries(entry_keys):
         result.append(Entry(entry.key.id(), entry.parent_key, entry.content,
                             entry.type, entry.child_index))
     return result
+    
+def get_entry(key):
+    ndb_key = ndb.Key(flat=['DataStoreEntry', key], parent=get_key())
+    logging.info(str(ndb_key.id()))
+    #query = DataStoreEntry.query(ancestor = ndb_key)
+    #logging.info(query.get())
 
 def delete_entries(entry_keys):
     pass

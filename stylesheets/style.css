@@ -26,7 +26,38 @@ div#editForm input[type=text] {
   display: block;
 }
 
+div#latexFormBackground {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: gray;
+  opacity: 0.85;
+  position: fixed;
+}
+
+div#latexForm {
+  left: 30%;
+  top: 20%;
+  width: 40%;
+  height: 40%;
+  background-color: white;
+  opacity: 1.0;
+  border: 5px solid black;
+  position: fixed;
+}
+
+div#latexForm input[type=text] {
+  display: block;
+  height = 80%;
+}
+
 div.editing div.section {
   margin: 5px 5px 5px 5px;
   border: 1px solid red;
+}
+
+div.latex div.section {
+  margin: 5px 5px 5px 5px;
+  border: 1px solid blue;
 }

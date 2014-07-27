@@ -38,6 +38,18 @@ def generate_hierarchy(entries):
         node.children.sort(key=lambda x:x.child_index)
     root_nodes.sort(key=lambda x:x.child_index)
     return root_nodes
+    
+def get_latex_content(key, level):
+    children = datastore.get_child_of_entry(key, level)
+    #for child in children:
+        
+    
+def get_hierarchy_level(key):
+    level = 0
+    entry = datastore.get_entries([key])[0]
+    datastore.get_entry(entry.parent_key)
+    #logging.info(len(parent))
+    #logging.info(str(parent[0]))
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -71,11 +83,19 @@ class EditEntry(webapp2.RequestHandler):
         entry = datastore.Entry(key, parent_key, content, type, child_index)
         datastore.add_or_update_entries([entry])
         self.redirect('/')
+        
+class LatexContent(webapp2.RequestHandler):
+    def get(self):
+        key = self.request.get('key')
+        level = get_hierarchy_level(key)
+        #latex_content = get_latex_content(key, level)
+        #self.response.write(latex_content)
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/NodeInfo', NodeInfo),
     ('/EditEntry', EditEntry),
+    ('/LatexContent', LatexContent)
 ], debug=True)
 
 datastore.create_test_entries()

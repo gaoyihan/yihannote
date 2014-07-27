@@ -17,6 +17,15 @@ yihannote.changeMode = function(mode) {
             document.getElementById('editFormContainer').className = '';
             noteBody.removeEventListener('click', yihannote.onNoteBodyClick);
         }
+    } else if (mode === 'latex' || mode === 'inLatex') {
+        document.getElementById('note body').className = 'latex';
+        if (mode === 'latex') {
+            document.getElementById('latexFormContainer').className = 'hidden';
+            noteBody.addEventListener('click', yihannote.onNoteBodyClick);
+        } else {
+            document.getElementById('latexFormContainer').className = '';
+            noteBody.removeEventListener('click', yihannote.onNoteBodyClick);
+        }
     }
     yihannote.mode = mode;
 };
@@ -26,28 +35,42 @@ yihannote.onNoteBodyClick = function(event) {
     while (!targetNode.id) {
         targetNode = targetNode.parentNode;
     }
-    var ajaxResponseHandler = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            yihannote.changeMode('inEdit');
-            var response = JSON.parse(this.responseText);
-            document.getElementById('editFormKey').value = response.key;
-            document.getElementById('editFormParentKey').value = response.parent_key;
-            document.getElementById('editFormContent').value = response.content; 
-            document.getElementById('editFormChildIndex').value = response.child_index;
-            if (response.type === 'title') {
-                document.getElementById('editFormTypeTitle').checked = true;
-            } else if (response.type === 'equation') {
-                document.getElementById('editFormTypeEquation').checked = true;
-            } else if (response.type === 'paragraph') {
-                document.getElementById('editFormTypeParagraph').checked = true;
+    if (yihannote.mode === 'edit') {
+        var ajaxResponseHandler = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                yihannote.changeMode('inEdit');
+                var response = JSON.parse(this.responseText);
+                document.getElementById('editFormKey').value = response.key;
+                document.getElementById('editFormParentKey').value = response.parent_key;
+                document.getElementById('editFormContent').value = response.content; 
+                document.getElementById('editFormChildIndex').value = response.child_index;
+                if (response.type === 'title') {
+                    document.getElementById('editFormTypeTitle').checked = true;
+                } else if (response.type === 'equation') {
+                    document.getElementById('editFormTypeEquation').checked = true;
+                } else if (response.type === 'paragraph') {
+                    document.getElementById('editFormTypeParagraph').checked = true;
+                }
+            }
+        };
+    
+        var req = new XMLHttpRequest();
+        req.open('GET', '/NodeInfo?key=' + targetNode.id);
+        req.onreadystatechange = ajaxResponseHandler;
+        req.send();
+    } else if (yihannote.mode === 'latex') {
+        var ajaxResponseHandler = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                yihannote.changeMode('inLatex');
+                document.getElementById('latexFormContent').value = this.responseText;
             }
         }
-    };
-    
-    var req = new XMLHttpRequest();
-    req.open('GET', '/NodeInfo?key=' + targetNode.id);
-    req.onreadystatechange = ajaxResponseHandler;
-    req.send();
+        
+        var req = new XMLHttpRequest();
+        req.open('GET', '/LatexContent?key=' + targetNode.id);
+        req.onreadystatechange = ajaxResponseHandler;
+        req.send();
+    }
 };
 
 yihannote.onKeyDown = function(event) {
@@ -62,7 +85,13 @@ yihannote.onKeyDown = function(event) {
     }
 };
 
-yihannote.onEditFormBackgroundClick = function(event) {
+yihannote.onLatexFormContainerClick = function(event) {
+    if (event.target.id === 'latexFormBackground') {
+        yihannote.changeMode('latex');
+    }
+}
+
+yihannote.onEditFormContainerClick = function(event) {
     if (event.target.id === 'editFormBackground') {
         yihannote.changeMode('edit');
     }
