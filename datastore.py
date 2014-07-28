@@ -10,6 +10,7 @@ class Entry:
         self.child_index = child_index
 
 PARENT_KEY = 'yihannote'
+NONE_KEY = 'NONE_KEY'
 
 def get_key():
     return ndb.Key('Note', PARENT_KEY)
@@ -27,7 +28,16 @@ def get_all_entries():
         result.append(Entry(entry.key.id(), entry.parent_key,
                             entry.content, entry.type, entry.child_index))
     return result
-    
+
+def get_child_of_entry(key):
+    entries_query = DataStoreEntry.query(DataStoreEntry.parent_key == key,
+                                         ancestor=get_key())
+    result = []
+    for entry in entries_query.fetch():
+        result.append(Entry(entry.key.id(), entry.parent_key, entry.content,
+                            entry.type, entry.child_index))
+    return result
+
 def create_test_entries():
     entry1 = Entry('Sec 1', '', 'First Section', 'title', 1)
     entry2 = Entry('Sec 2', '', 'Second Section', 'title', 2)
@@ -41,20 +51,20 @@ def create_test_entries():
 def get_entries(entry_keys):
     key_list = []
     for key in entry_keys:
-        key_list.append(ndb.Key(DataStoreEntry, key, parent=get_key()))
+        if key:
+            key_list.append(ndb.Key(DataStoreEntry, key, parent=get_key()))
+        else:
+            key_list.append(ndb.Key(DataStoreEntry, NONE_KEY))
     query_result = ndb.get_multi(key_list)
     result = []
     for entry in query_result:
-        result.append(Entry(entry.key.id(), entry.parent_key, entry.content,
+        if entry:
+            result.append(Entry(entry.key.id(), entry.parent_key, entry.content,
                             entry.type, entry.child_index))
+        else:
+            result.append(None)
     return result
     
-def get_entry(key):
-    ndb_key = ndb.Key(flat=['DataStoreEntry', key], parent=get_key())
-    logging.info(str(ndb_key.id()))
-    #query = DataStoreEntry.query(ancestor = ndb_key)
-    #logging.info(query.get())
-
 def delete_entries(entry_keys):
     pass
     

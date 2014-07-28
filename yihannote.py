@@ -39,17 +39,33 @@ def generate_hierarchy(entries):
     root_nodes.sort(key=lambda x:x.child_index)
     return root_nodes
     
-def get_latex_content(key, level):
-    children = datastore.get_child_of_entry(key, level)
-    #for child in children:
-        
+def get_latex_content(entry, level):
+    latex_content = ''
+    if (entry.type == 'title'):
+        if level == 1:
+            latex_content += '\section{' + entry.content + '}\n'
+        elif level == 2:
+            latex_content += '\subsection{' + entry.content + '}\n'
+        elif level == 3:
+            latex_content += '\subsubsection{' + entry.content + '}\n'
+    elif (entry.type == 'equation'):
+        latex_content += '$$' + entry.content + '$$\n'
+    elif (entry.type == 'paragraph'):
+        latex_content += entry.content + '\n\n'
+
+    children = datastore.get_child_of_entry(entry.key)
+    children.sort(key = lambda x:x.child_index)
+    for child in children:
+        latex_content += get_latex_content(child, level + 1)
+    return latex_content
     
 def get_hierarchy_level(key):
     level = 0
     entry = datastore.get_entries([key])[0]
-    datastore.get_entry(entry.parent_key)
-    #logging.info(len(parent))
-    #logging.info(str(parent[0]))
+    while (entry):
+        entry = datastore.get_entries([entry.parent_key])[0]
+        level += 1
+    return level
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -88,14 +104,26 @@ class LatexContent(webapp2.RequestHandler):
     def get(self):
         key = self.request.get('key')
         level = get_hierarchy_level(key)
-        #latex_content = get_latex_content(key, level)
-        #self.response.write(latex_content)
+        entry = datastore.get_entries([key])[0]
+        latex_content = get_latex_content(entry, level)
+        self.response.write(latex_content)
+
+class LatexPost(webapp2.RequestHandler):
+    def post(self):
+        key = self.request.get('key')
+        content = self.request.get('content')
+        entry = datastore.get_entries([key])[0]
+        subtree_keys = get_subtree(key)
+        datastore.delete_entries(subtree_keys)
+
+        self.redirect('/')
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/NodeInfo', NodeInfo),
     ('/EditEntry', EditEntry),
-    ('/LatexContent', LatexContent)
+    ('/LatexContent', LatexContent),
+    ('/LatexPost', LatexPost)
 ], debug=True)
 
 datastore.create_test_entries()

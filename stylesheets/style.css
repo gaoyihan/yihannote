@@ -47,9 +47,16 @@ div#latexForm {
   position: fixed;
 }
 
-div#latexForm input[type=text] {
+div#latexForm form {
+  height: 80%;
+}
+
+div#latexForm textarea {
   display: block;
-  height = 80%;
+  height: 100%;
+  width: 100%;
+  border: 1px solid red;
+  overflow: hidden; 
 }
 
 div.editing div.section {

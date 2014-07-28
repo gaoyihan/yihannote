@@ -62,6 +62,7 @@ yihannote.onNoteBodyClick = function(event) {
         var ajaxResponseHandler = function() {
             if (this.readyState == 4 && this.status == 200) {
                 yihannote.changeMode('inLatex');
+                document.getElementById('latexFormKey').value = targetNode.id;
                 document.getElementById('latexFormContent').value = this.responseText;
             }
         }

@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <script type="text/javascript" src="javascripts/yihannote.js" async></script>
     <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
+    <script type="text/javascript">LatexIT.add('p',true);</script>
   </head>
   <body onkeydown="yihannote.onKeyDown(event)">
     <button onclick="yihannote.changeMode('view')">View</button>
@@ -17,7 +18,8 @@
       <div id="latexForm">
         <form action="/LatexPost" method="post">
           Latex Content:
-          <input type="text" name="content" id="latexFormContent" placeholder="Key"/>
+          <textarea name="content" id="latexFormContent"></textarea>
+          <input type="hidden" name="key" id="latexFormKey"/>
           <input type="submit" value="Submit">
         </form>
       </div>
@@ -53,7 +55,9 @@
           <div lang="latex" class="equation">{{ section.content }}</div>
         {% endif %}
         {% if section.type == "paragraph" %}
-          <div class="paragraph">{{ section.content }}</div>
+          <div class="paragraph">
+          <p>{{ section.content }}</p>
+          </div>
         {% endif %}
         {% for subsection in section.children %}
         <div id="{{ subsection.key }}" class="section">
@@ -64,7 +68,9 @@
             <div lang="latex" class="equation">{{ subsection.content }}</div>
           {% endif %}
           {% if subsection.type == "paragraph" %}
-            <div class="paragraph">{{ subsection.content }}</div>
+            <div class="paragraph">
+            <p>{{ subsection.content }}</p>
+            </div>
           {% endif %}
           {% for subsubsection in subsection.children %}
           <div id="{{ subsubsection.key }}" class="section">
@@ -75,7 +81,9 @@
               <div lang="latex" class="equation">{{ subsubsection.content }}</div>
             {% endif %}
             {% if subsubsection.type == "paragraph" %}
-              <div class="paragraph">{{ subsubsection.content }}</div>
+              <div class="paragraph">
+              <p>{{ subsubsection.content }}</p>
+              </div>
             {% endif %}
           </div>
           {% endfor %}
