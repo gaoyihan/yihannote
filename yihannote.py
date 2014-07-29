@@ -161,8 +161,24 @@ def parse_latex_content(content, root_key):
 class MainPage(webapp2.RequestHandler):
     def get(self):
         entries = datastore.get_all_entries()
+        user = users.get_current_user()
+        allow_modification = False
+        if user:
+            login_logout_message = ('Welcome, %s!' % user.nickname())
+            login_logout_url = users.create_logout_url('/')
+            login_logout_linktext = 'Sign out'
+            if users.is_current_user_admin():
+                allow_modification = True
+        else:
+            login_logout_message = 'Welcome, guest!'
+            login_logout_url = users.create_login_url('/')
+            login_logout_linktext = 'Sign in or register'
         template_values = {
-            'sections': generate_hierarchy(entries)
+            'sections': generate_hierarchy(entries),
+            'login_logout_message': login_logout_message,
+            'login_logout_url': login_logout_url,
+            'login_logout_linktext': login_logout_linktext,
+            'allow_modification': allow_modification
         }
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))

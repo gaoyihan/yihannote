@@ -9,9 +9,17 @@
     <script type="text/javascript">LatexIT.add('p',true);</script>
   </head>
   <body onkeydown="yihannote.onKeyDown(event)">
-    <button onclick="yihannote.changeMode('view')">View</button>
-    <button onclick="yihannote.changeMode('edit')">Edit</button>
-    <button onclick="yihannote.changeMode('latex')">LaTex</button>
+    <div id="logInLogOut">
+        {{ login_logout_message }}
+        <a href="{{ login_logout_url|safe }}">{{ login_logout_linktext }}</a>
+    </div>
+    {% if allow_modification %}
+      <div id="modificationMenu">
+        <button onclick="yihannote.changeMode('view')">View</button>
+        <button onclick="yihannote.changeMode('edit')">Edit</button>
+        <button onclick="yihannote.changeMode('latex')">LaTex</button>
+      </div>
+    {% endif %}
     <div id="latexFormContainer" onclick="yihannote.onLatexFormContainerClick(event)" class="hidden">  
       <div id="latexFormBackground">
       </div>
