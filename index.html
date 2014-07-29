@@ -34,7 +34,7 @@
           Parent Key:
           <input type="text" name="parent_key" id="editFormParentKey" placeholder="Parent Key"/>
           Content:
-          <input type="text" name="content" id="editFormContent" placeholder="Content"/>
+          <textarea name="content" id="editFormContent"></textarea>
           Child Index:
           <input type="text" name="child_index" id="editFormChildIndex" placeholder="Child Index"/>
           Type:
@@ -47,7 +47,7 @@
     </div>
     <div id="note body">
       {% for section in sections %}
-      <div id="{{ section.key }}" class="section">
+      <div id="{{ section.key }}" class="section sec-{{ section.type }}">
         {% if section.type == "title" %}
           <h1 class="title">{{ section.content }}</h1>
         {% endif %}
@@ -60,7 +60,7 @@
           </div>
         {% endif %}
         {% for subsection in section.children %}
-        <div id="{{ subsection.key }}" class="section">
+        <div id="{{ subsection.key }}" class="section sec-{{ subsection.type }}">
           {% if subsection.type == "title" %}
             <h2 class="title">{{ subsection.content }}</h2>
           {% endif %}
@@ -73,7 +73,7 @@
             </div>
           {% endif %}
           {% for subsubsection in subsection.children %}
-          <div id="{{ subsubsection.key }}" class="section">
+          <div id="{{ subsubsection.key }}" class="section sec-{{ subsubsection.type }}">
             {% if subsubsection.type == "title" %}
               <h3 class="title">{{ subsubsection.content }}</h3>
             {% endif %}

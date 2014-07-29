@@ -45,17 +45,20 @@ def create_test_entries():
     entry4 = Entry('Sec 1.2', 'Sec 1', 'Second Subsection', 'title', 2)
     entry5 = Entry('Sec 2 p1', 'Sec 2', 'first paragraph', 'paragraph', 1)
     entry6 = Entry('Sec 2 p2', 'Sec 2', 'second paragraph', 'paragraph', 2)
-    entry7 = Entry('Sec 2 eq1', 'Sec 2', '\\int_0^1 x^2 dx = \\frac{1}{3}', 'equation', 3)
+    entry7 = Entry('Sec 2 eq3', 'Sec 2', '$$\\int_0^1 x^2 dx = \\frac{1}{3}$$', 'equation', 3)
     add_or_update_entries([entry1, entry2, entry3, entry4, entry5, entry6, entry7])
 
-def get_entries(entry_keys):
+def get_key_list(entry_keys):
     key_list = []
     for key in entry_keys:
         if key:
             key_list.append(ndb.Key(DataStoreEntry, key, parent=get_key()))
         else:
             key_list.append(ndb.Key(DataStoreEntry, NONE_KEY))
-    query_result = ndb.get_multi(key_list)
+    return key_list 
+
+def get_entries(entry_keys):
+    query_result = ndb.get_multi(get_key_list(entry_keys))
     result = []
     for entry in query_result:
         if entry:
@@ -66,7 +69,7 @@ def get_entries(entry_keys):
     return result
     
 def delete_entries(entry_keys):
-    pass
+    ndb.delete_multi(get_key_list(entry_keys))
     
 def add_or_update_entries(entries):
     data_store_entries = []

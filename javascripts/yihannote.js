@@ -35,6 +35,7 @@ yihannote.onNoteBodyClick = function(event) {
     while (!targetNode.id) {
         targetNode = targetNode.parentNode;
     }
+
     if (yihannote.mode === 'edit') {
         var ajaxResponseHandler = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -62,8 +63,9 @@ yihannote.onNoteBodyClick = function(event) {
         var ajaxResponseHandler = function() {
             if (this.readyState == 4 && this.status == 200) {
                 yihannote.changeMode('inLatex');
-                document.getElementById('latexFormKey').value = targetNode.id;
-                document.getElementById('latexFormContent').value = this.responseText;
+                var response = JSON.parse(this.responseText)
+                document.getElementById('latexFormKey').value = response.key;
+                document.getElementById('latexFormContent').value = response.content;
             }
         }
         
@@ -80,6 +82,8 @@ yihannote.onKeyDown = function(event) {
             yihannote.changeMode('edit');
         } else if (yihannote.mode === 'edit') {
             yihannote.changeMode('view');
+        } else if (yihannote.mode === 'inLatex') {
+            yihannote.changeMode('latex');
         } else if (yihannote.mode === 'latex') {
             yihannote.changeMode('view');
         }
