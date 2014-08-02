@@ -2,7 +2,32 @@
   display: none;
 }
 
-div#editFormBackground {
+div.Form {
+  top: 20%;
+  left: 50%;
+  width: 250px;
+  padding: 10px 25px;
+  border-radius: 10px;
+  margin-left: -175px; 
+  background-color: white;
+  opacity: 1.0;
+  border: 5px solid black;
+  position: absolute;
+  z-index: 1;
+}
+
+div.Form div.textWrapper {
+  font-size: 16px;
+  font-family: raleway;
+  padding: 6px 0px 2px 0px;
+}
+
+div.Form input[type="text"] {
+  width: 244px;
+  font-size: 16px;
+}
+
+div.FormBackground {
   left: 0;
   top: 0;
   width: 100%;
@@ -10,75 +35,89 @@ div#editFormBackground {
   background-color: gray;
   opacity: 0.85;
   position: fixed;
+  z-index: 1;
 }
 
-div#editForm {
-  left: 30%;
-  top: 20%;
-  height: 40%;
-  width: 40%;
-  background-color: white;
-  opacity: 1.0;
-  border: 5px solid black;
-  position: fixed;
-}
-
-div#editForm input[type=text] {
+textarea {
+  width: 244px;
+  height: 160px;
+  font-size: 16px;
   display: block;
 }
 
-div#latexFormBackground {
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: gray;
-  opacity: 0.85;
-  position: fixed;
+div.radiobuttons {
+  font-size: 16px;
 }
 
-div#latexForm {
-  left: 30%;
-  top: 20%;
-  width: 40%;
-  height: 40%;
-  background-color: white;
-  opacity: 1.0;
-  border: 5px solid black;
-  position: fixed;
-}
-
-div#latexForm form {
-  height: 80%;
-  margin: 5px 5px 5px 5px;
-}
-
-div#editForm form {
-  height: 80%;
-  margin: 5px 5px 5px 5px;
-}
-
-div#latexForm textarea {
+input.submit {
+  width: 60%;
+  margin-left: 20%;
   display: block;
-  width: 100%;
-  height: 100%;
+  text-align: center;
+  background-color: #FFBC00;
+  color: white;
+  font-size: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+div.editing div.section:hover {
+  margin: 5px;
   border: 1px solid red;
-  overflow: hidden; 
+  border-radius: 5px;
 }
 
-div#editForm textarea {
-  display: block;
-  width: 100%;
-  height: 60%;
-  overflow: hidden;
-}
-
-div.editing div.section {
-  margin: 5px 5px 5px 5px;
-  border: 1px solid red;
-}
-
-div.latex div.sec-title {
-  margin: 5px 5px 5px 5px;
+div.latex div.sec-title:hover {
+  margin: 5px;
   border: 1px solid blue;
+  border-radius: 5px;
+}
+
+div#logInLogOut {
+  margin: 0;
+  font-size: 24px;
+  width: 100%;
+  height: 32px;
+  text-align: right;
+  background-color: yellow;
+  left: 0;
+  top: 0;
+  position: absolute;
+}
+
+div#leftMenu {
+  margin: 0;
+  width: 100px;
+  background-color: #00FFFF;
+  position: absolute;
+  left: 0;
+  top: 32px;
+  bottom: 0;
+}
+
+div#leftMenu button {
+  background-color: lightgreen;
+  width: 100%;
+  border: 5px;
+  border-radius: 5px;
+  margin-top: 10px;
+  height: 28px;
+  font-size: 20px;
+  text-align: center;
+  display: block;
+}
+
+html,body {
+  margin: 0;
+  height: 100%;
+}
+
+div#noteBody {
+  margin: 8px;
+  left: 100px;
+  right: 0;
+  bottom: 0;
+  top: 32px;
+  position: absolute;
+  overflow: auto;
 }

@@ -13,47 +13,64 @@
         {{ login_logout_message }}
         <a href="{{ login_logout_url|safe }}">{{ login_logout_linktext }}</a>
     </div>
-    {% if allow_modification %}
+    <div id="leftMenu">
+      {% if allow_modification %}
       <div id="modificationMenu">
         <button onclick="yihannote.changeMode('view')">View</button>
         <button onclick="yihannote.changeMode('edit')">Edit</button>
         <button onclick="yihannote.changeMode('latex')">LaTex</button>
       </div>
-    {% endif %}
+      {% endif %}
+    </div>
     <div id="latexFormContainer" onclick="yihannote.onLatexFormContainerClick(event)" class="hidden">  
-      <div id="latexFormBackground">
+      <div class="FormBackground">
       </div>
-      <div id="latexForm">
+      <div class="Form">
         <form action="/LatexPost" method="post">
-          Latex Content:
+          <div class="textWrapper">
+            Latex Content:
+          </div>
           <textarea name="content" id="latexFormContent"></textarea>
           <input type="hidden" name="key" id="latexFormKey"/>
-          <input type="submit" value="Submit">
+          <input type="submit" value="Submit" class="submit">
         </form>
       </div>
     </div>
     <div id="editFormContainer" onclick="yihannote.onEditFormContainerClick(event)" class="hidden">  
-      <div id="editFormBackground">
+      <div class="FormBackground">
       </div>
-      <div id="editForm">
+      <div class="Form">
         <form action="/EditEntry" method="post">
-          Key:
+          <div class="textWrapper">
+            Key:
+          </div>
           <input type="text" name="key" id="editFormKey" placeholder="Key"/>
-          Parent Key:
+          <div class="textWrapper">
+            Parent Key:
+          </div>
           <input type="text" name="parent_key" id="editFormParentKey" placeholder="Parent Key"/>
-          Content:
+          <div class="textWrapper">
+            Child Index:
+          </div>
+          <input type="text" name="child_index" id="editFormChildIndex" 
+            placeholder="Child Index"/>
+          <div class="textWrapper">
+            Type:
+          </div>
+          <div class="radiobuttons">
+            <input type="radio" name="type" id="editFormTypeTitle" value="title"/>Title
+            <input type="radio" name="type" id="editFormTypeEquation" value="equation"/>Equation
+            <input type="radio" name="type" id="editFormTypeParagraph" value="paragraph"/>Paragraph
+          </div>
+          <div class="textWrapper">
+            Content:
+          </div>
           <textarea name="content" id="editFormContent"></textarea>
-          Child Index:
-          <input type="text" name="child_index" id="editFormChildIndex" placeholder="Child Index"/>
-          Type:
-          <input type="radio" name="type" id="editFormTypeTitle" value="title"/>Title
-          <input type="radio" name="type" id="editFormTypeEquation" value="equation"/>Equation
-          <input type="radio" name="type" id="editFormTypeParagraph" value="paragraph"/>Paragraph
-          <input type="submit" value="Submit">
+          <input type="submit" value="Submit" class="submit">
         </form>
       </div>
     </div>
-    <div id="note body">
+    <div id="noteBody">
       {% for section in sections %}
       <div id="{{ section.key }}" class="section sec-{{ section.type }}">
         {% if section.type == "title" %}
