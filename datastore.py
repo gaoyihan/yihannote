@@ -47,7 +47,11 @@ def create_test_entries():
     entry5 = Entry('Sec 2 p1', 'Sec 2', 'first paragraph', 'paragraph', 1)
     entry6 = Entry('Sec 2 p2', 'Sec 2', 'second paragraph', 'paragraph', 2)
     entry7 = Entry('Sec 2 eq3', 'Sec 2', '$$\\int_0^1 x^2 dx = \\frac{1}{3}$$', 'equation', 3)
-    add_or_update_entries([entry1, entry2, entry3, entry4, entry5, entry6, entry7])
+    entry8 = Entry('Sec 1.1.1', 'Sec 1.1', 'First subsubsection', 'title', 1)
+    entry9 = Entry('Sec 1.1.1.1', 'Sec 1.1.1', 'First sub3section', 'title', 1)
+    entry10 = Entry('Sec 1.1.1.1.1', 'Sec 1.1.1.1', 'First sub4section', 'title', 1)
+    entry11 = Entry('Sec 1.1.1.1.1 p1', 'Sec 1.1.1.1.1', 'sub4section paragraph', 'paragraph', 1)
+    add_or_update_entries([entry1, entry2, entry3, entry4, entry5, entry6, entry7, entry8, entry9, entry10, entry11])
 
 def get_key_list(entry_keys):
     key_list = []

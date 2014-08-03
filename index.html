@@ -21,6 +21,13 @@
         <button onclick="yihannote.changeMode('latex')">LaTex</button>
       </div>
       {% endif %}
+      <div id="anchorMenu">
+        {% for section in sections %}
+        {% if section.type == 'title' %}
+        <a href="#{{ section.key }}">{{ section.content }}</a>
+        {% endif %}
+        {% endfor %}
+      </div>
     </div>
     <div id="latexFormContainer" onclick="yihannote.onLatexFormContainerClick(event)" class="hidden">  
       <div class="FormBackground">
@@ -110,6 +117,48 @@
               <p>{{ subsubsection.content }}</p>
               </div>
             {% endif %}
+            {% for sub3section in subsubsection.children %}
+            <div id="{{ sub3section.key }}" class="section sec-{{ sub3section.type }}">
+              {% if sub3section.type == "title" %}
+                <h4 class="title">{{ sub3section.content }}</h4>
+              {% endif %}
+              {% if sub3section.type == "equation" %}
+                <div lang="latex" class="equation">{{ sub3section.content }}</div>
+              {% endif %}
+              {% if sub3section.type == "paragraph" %}
+                <div class="paragraph">
+                <p>{{ sub3section.content }}</p>
+                </div>
+              {% endif %}
+              {% for sub4section in sub3section.children %}
+              <div id="{{ sub4section.key }}" class="section sec-{{ sub4section.type }}">
+                {% if sub4section.type == "title" %}
+                  <h5 class="title">{{ sub4section.content }}</h5>
+                {% endif %}
+                {% if sub4section.type == "equation" %}
+                  <div lang="latex" class="equation">{{ sub4section.content }}</div>
+                {% endif %}
+                {% if sub4section.type == "paragraph" %}
+                  <div class="paragraph">
+                  <p>{{ sub4section.content }}</p>
+                  </div>
+                {% endif %}
+                {% for sub5section in sub4section.children %}
+                <div id="{{ sub5section.key }}" class="section sec-{{ sub5section.type }}">
+                  {% if sub5section.type == "equation" %}
+                    <div lang="latex" class="equation">{{ sub5section.content }}</div>
+                  {% endif %}
+                  {% if sub5section.type == "paragraph" %}
+                    <div class="paragraph">
+                    <p>{{ sub5section.content }}</p>
+                    </div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+              {% endfor %} 
+            </div>
+            {% endfor %}
           </div>
           {% endfor %}
         </div>

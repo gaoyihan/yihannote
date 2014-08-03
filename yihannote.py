@@ -59,6 +59,8 @@ def get_latex_content(entry, level):
                 latex_content += '\subsubsection{' + entry.content + '}\n'
             elif level == 3:
                 latex_content += '\paragraph{' + entry.content + '}\n'
+            elif level == 4:
+                latex_content += '\subparagraph{' + entry.content + '}\n'
         elif (entry.type == 'equation'):
             latex_content += entry.content + '\n\n'
         elif (entry.type == 'paragraph'):
