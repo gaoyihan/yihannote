@@ -51,7 +51,16 @@ def create_test_entries():
     entry9 = Entry('Sec 1.1.1.1', 'Sec 1.1.1', 'First sub3section', 'title', 1)
     entry10 = Entry('Sec 1.1.1.1.1', 'Sec 1.1.1.1', 'First sub4section', 'title', 1)
     entry11 = Entry('Sec 1.1.1.1.1 p1', 'Sec 1.1.1.1.1', 'sub4section paragraph', 'paragraph', 1)
+    entry12 = Entry('Sec 2 ol4', 'Sec 2', '', 'ordered_list', 4)
+    entry13 = Entry('Sec 2 ul5', 'Sec 2', '', 'list', 5)
+    entry14 = Entry('Sec 2 ol4 li1', 'Sec 2 ol4', '', 'list_item', 1)
+    entry15 = Entry('Sec 2 ol4 li2', 'Sec 2 ol4', '', 'list_item', 2)
+    entry17 = Entry('Sec 2 ol4 li1 p1', 'Sec 2 ol4 li1', 'list content:', 'paragraph', 1)
+    entry18 = Entry('Sec 2 ol4 li1 eq2', 'Sec 2 ol4 li1', '$$x^3+y^3=1$$', 'equation', 2)
+    entry16 = Entry('Sec 2 ul5 li1', 'Sec 2 ul5', '', 'list_item', 1)
+    entry19 = Entry('Sec 2 ul5 li2', 'Sec 2 ul5', '', 'list_item', 2)
     add_or_update_entries([entry1, entry2, entry3, entry4, entry5, entry6, entry7, entry8, entry9, entry10, entry11])
+    add_or_update_entries([entry12, entry13, entry14, entry15, entry16, entry17, entry18])
 
 def get_key_list(entry_keys):
     key_list = []

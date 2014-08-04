@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% autoescape true %}
+{%- autoescape true %}
 <html>
   <head>
     <title>Deposit Note</title>
@@ -14,19 +14,19 @@
         <a href="{{ login_logout_url|safe }}">{{ login_logout_linktext }}</a>
     </div>
     <div id="leftMenu">
-      {% if allow_modification %}
+      {%- if allow_modification %}
       <div id="modificationMenu">
         <button onclick="yihannote.changeMode('view')">View</button>
         <button onclick="yihannote.changeMode('edit')">Edit</button>
         <button onclick="yihannote.changeMode('latex')">LaTex</button>
       </div>
-      {% endif %}
+      {%- endif %}
       <div id="anchorMenu">
-        {% for section in sections %}
-        {% if section.type == 'title' %}
+        {%- for section in sections %}
+        {%- if section.type == 'title' %}
         <a href="#{{ section.key }}">{{ section.content }}</a>
-        {% endif %}
-        {% endfor %}
+        {%- endif %}
+        {%- endfor %}
       </div>
     </div>
     <div id="latexFormContainer" onclick="yihannote.onLatexFormContainerClick(event)" class="hidden">  
@@ -78,94 +78,175 @@
       </div>
     </div>
     <div id="noteBody">
-      {% for section in sections %}
-      <div id="{{ section.key }}" class="section sec-{{ section.type }}">
-        {% if section.type == "title" %}
-          <h1 class="title">{{ section.content }}</h1>
-        {% endif %}
-        {% if section.type == "equation" %}
-          <div lang="latex" class="equation">{{ section.content }}</div>
-        {% endif %}
-        {% if section.type == "paragraph" %}
-          <div class="paragraph">
-          <p>{{ section.content }}</p>
-          </div>
-        {% endif %}
-        {% for subsection in section.children %}
-        <div id="{{ subsection.key }}" class="section sec-{{ subsection.type }}">
-          {% if subsection.type == "title" %}
-            <h2 class="title">{{ subsection.content }}</h2>
-          {% endif %}
-          {% if subsection.type == "equation" %}
-            <div lang="latex" class="equation">{{ subsection.content }}</div>
-          {% endif %}
-          {% if subsection.type == "paragraph" %}
-            <div class="paragraph">
-            <p>{{ subsection.content }}</p>
-            </div>
-          {% endif %}
-          {% for subsubsection in subsection.children %}
-          <div id="{{ subsubsection.key }}" class="section sec-{{ subsubsection.type }}">
-            {% if subsubsection.type == "title" %}
-              <h3 class="title">{{ subsubsection.content }}</h3>
-            {% endif %}
-            {% if subsubsection.type == "equation" %}
-              <div lang="latex" class="equation">{{ subsubsection.content }}</div>
-            {% endif %}
-            {% if subsubsection.type == "paragraph" %}
-              <div class="paragraph">
-              <p>{{ subsubsection.content }}</p>
-              </div>
-            {% endif %}
-            {% for sub3section in subsubsection.children %}
-            <div id="{{ sub3section.key }}" class="section sec-{{ sub3section.type }}">
-              {% if sub3section.type == "title" %}
-                <h4 class="title">{{ sub3section.content }}</h4>
-              {% endif %}
-              {% if sub3section.type == "equation" %}
-                <div lang="latex" class="equation">{{ sub3section.content }}</div>
-              {% endif %}
-              {% if sub3section.type == "paragraph" %}
-                <div class="paragraph">
-                <p>{{ sub3section.content }}</p>
-                </div>
-              {% endif %}
-              {% for sub4section in sub3section.children %}
-              <div id="{{ sub4section.key }}" class="section sec-{{ sub4section.type }}">
-                {% if sub4section.type == "title" %}
-                  <h5 class="title">{{ sub4section.content }}</h5>
-                {% endif %}
-                {% if sub4section.type == "equation" %}
-                  <div lang="latex" class="equation">{{ sub4section.content }}</div>
-                {% endif %}
-                {% if sub4section.type == "paragraph" %}
-                  <div class="paragraph">
-                  <p>{{ sub4section.content }}</p>
-                  </div>
-                {% endif %}
-                {% for sub5section in sub4section.children %}
-                <div id="{{ sub5section.key }}" class="section sec-{{ sub5section.type }}">
-                  {% if sub5section.type == "equation" %}
-                    <div lang="latex" class="equation">{{ sub5section.content }}</div>
-                  {% endif %}
-                  {% if sub5section.type == "paragraph" %}
-                    <div class="paragraph">
-                    <p>{{ sub5section.content }}</p>
-                    </div>
-                  {% endif %}
-                </div>
-                {% endfor %}
-              </div>
-              {% endfor %} 
-            </div>
-            {% endfor %}
-          </div>
-          {% endfor %}
-        </div>
-        {% endfor %}
+    {%- for section in sections %}
+    <div id="{{ section.key }}" class="section sec-{{ section.type }}">
+      {%- if section.type == "title" %}
+      <h1 class="title">{{ section.content }}</h1>
+      {%- endif %}
+      {%- if section.type == "equation" %}
+      <div lang="latex" class="equation">{{ section.content }}</div>
+      {%- endif %}
+      {%- if section.type == "paragraph" %}
+      <div class="paragraph">
+      <p>{{ section.content }}</p>
       </div>
-      {% endfor %}
+      {%- endif %}
+      {%- if section.type == "ordered_list" %}
+      <div class="ordered_list"> <ol>
+      {%- endif %}
+      {%- if section.type == "list" %}
+      <div class="list"> <ul>
+      {%- endif %}
+      {%- if section.type == "list_item" %}
+      <div class="list_item"> <li>
+      {%- endif %}        
+      {%- for subsection in section.children %}
+      <div id="{{ subsection.key }}" class="section sec-{{ subsection.type }}">
+        {%- if subsection.type == "title" %}
+        <h2 class="title">{{ subsection.content }}</h2>
+        {%- endif %}
+        {%- if subsection.type == "equation" %}
+        <div lang="latex" class="equation">{{ subsection.content }}</div>
+        {%- endif %}
+        {%- if subsection.type == "paragraph" %}
+        <div class="paragraph">
+          <p>{{ subsection.content }}</p>
+        </div>
+        {%- endif %}
+        {%- if subsection.type == "ordered_list" %}
+        <div class="ordered_list"> <ol>
+        {%- endif %}
+        {%- if subsection.type == "list" %}
+        <div class="list"> <ul>
+        {%- endif %}
+        {%- if subsection.type == "list_item" %}
+        <div class="list_item"> <li>
+        {%- endif %}
+        {%- for subsubsection in subsection.children %}
+        <div id="{{ subsubsection.key }}" class="section sec-{{ subsubsection.type }}">
+          {%- if subsubsection.type == "title" %}
+          <h3 class="title">{{ subsubsection.content }}</h3>
+          {%- endif %}
+          {%- if subsubsection.type == "equation" %}
+          <div lang="latex" class="equation">{{ subsubsection.content }}</div>
+          {%- endif %}
+          {%- if subsubsection.type == "paragraph" %}
+          <div class="paragraph">
+            <p>{{ subsubsection.content }}</p>
+          </div>
+          {%- endif %}
+          {%- if subsubsection.type == "ordered_list" %}
+          <div class="ordered_list"> <ol>
+          {%- endif %}
+          {%- if subsubsection.type == "list" %}
+          <div class="list"> <ul>
+          {%- endif %}
+          {%- if subsubsection.type == "list_item" %}
+          <div class="list_item"> <li>
+          {%- endif %}            
+          {%- for sub3section in subsubsection.children %}
+          <div id="{{ sub3section.key }}" class="section sec-{{ sub3section.type }}">
+            {%- if sub3section.type == "title" %}
+            <h4 class="title">{{ sub3section.content }}</h4>
+            {%- endif %}
+            {%- if sub3section.type == "equation" %}
+            <div lang="latex" class="equation">{{ sub3section.content }}</div>
+            {%- endif %}
+            {%- if sub3section.type == "paragraph" %}
+            <div class="paragraph">
+              <p>{{ sub3section.content }}</p>
+            </div>
+            {%- endif %}
+            {%- if sub3section.type == "ordered_list" %}
+            <div class="ordered_list"> <ol>
+            {%- endif %}
+            {%- if sub3section.type == "list" %}
+            <div class="list"> <ul>
+            {%- endif %}
+            {%- if sub3section.type == "list_item" %}
+            <div class="list_item"> <li>
+            {%- endif %}                
+            {%- for sub4section in sub3section.children %}
+            <div id="{{ sub4section.key }}" class="section sec-{{ sub4section.type }}">
+              {%- if sub4section.type == "title" %}
+              <h5 class="title">{{ sub4section.content }}</h5>
+              {%- endif %}
+              {%- if sub4section.type == "equation" %}
+              <div lang="latex" class="equation">{{ sub4section.content }}</div>
+              {%- endif %}
+              {%- if sub4section.type == "paragraph" %}
+              <div class="paragraph">
+                <p>{{ sub4section.content }}</p>
+              </div>
+              {%- endif %}
+              {%- for sub5section in sub4section.children %}
+              <div id="{{ sub5section.key }}" class="section sec-{{ sub5section.type }}">
+                {%- if sub5section.type == "equation" %}
+                <div lang="latex" class="equation">{{ sub5section.content }}</div>
+                {%- endif %}
+                {%- if sub5section.type == "paragraph" %}
+                <div class="paragraph">
+                  <p>{{ sub5section.content }}</p>
+                </div>
+                {%- endif %}
+              </div>
+              {%- endfor %}
+              {%- if sub4section.type == "ordered_list" %}
+              </ol> </div>
+              {%- endif %}
+              {%- if sub4section.type == "list" %}
+              </ul> </div>
+              {%- endif %}
+              {%- if sub4section.type == "list_item" %}
+              </li> </div>
+              {%- endif %}                              
+            </div>
+            {%- endfor %} 
+            {%- if sub3section.type == "ordered_list" %}
+            </ol> </div>
+            {%- endif %}
+            {%- if sub3section.type == "list" %}
+            </ul> </div>
+            {%- endif %}
+            {%- if sub3section.type == "list_item" %}
+            </li> </div>
+            {%- endif %}              
+          </div>
+          {%- endfor %}
+          {%- if subsubsection.type == "ordered_list" %}
+          </ol> </div>
+          {%- endif %}
+          {%- if subsubsection.type == "list" %}
+          </ul> </div>
+          {%- endif %}
+          {%- if subsubsection.type == "list_item" %}
+          </li> </div>
+          {%- endif %}
+        </div>
+        {%- endfor %}
+        {%- if subsection.type == "ordered_list" %}
+        </ol> </div>
+        {%- endif %}
+        {%- if subsection.type == "list" %}
+        </ul> </div>
+        {%- endif %}
+        {%- if subsection.type == "list_item" %}
+        </li> </div>
+        {%- endif %}
+      </div>
+      {%- endfor %}
+      {%- if section.type == "ordered_list" %}
+      </ol> </div>
+      {%- endif %}
+      {%- if section.type == "list" %}
+      </ul> </div>
+      {%- endif %}
+      {%- if section.type == "list_item" %}
+      </li> </div>
+      {%- endif %}
+    </div>
+    {%- endfor %}
     </div>
   </body>
 </html>
-{% endautoescape %}
+{%- endautoescape %}
