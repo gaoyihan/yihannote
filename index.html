@@ -9,6 +9,7 @@
     <script type="text/javascript">LatexIT.add('p',true);</script>
   </head>
   <body onkeydown="yihannote.onKeyDown(event)">
+  <div id="bodyWrapper">
     <div id="logInLogOut">
         {{ login_logout_message }}
         <a href="{{ login_logout_url|safe }}">{{ login_logout_linktext }}</a>
@@ -304,6 +305,7 @@
     </div>
     {%- endfor %}
     </div>
+  </div>
   </body>
 </html>
 {%- endautoescape %}
