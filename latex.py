@@ -98,10 +98,16 @@ def parse_latex_content(content, root_key):
             # Parse all partitions
             entry_list = []
             entry_list += parse_latex_content(content[0:sec_list[0]], root_key)
+            # Calculate number of non-section children
+            non_section_child = 0
+            for entry in entry_list:
+                if entry.parent_key == root_key:
+                    non_section_child += 1
+            # Parse section children
             for i in range(0, len(sec_list) - 1):
                 sec_entry = datastore.Entry(root_key + '.' + str(i + 1), root_key, 
                                             str_strip(content[sec_list[i]], prefix, '}'),
-                                            'title', i + 1)
+                                            'title', i + 1 + non_section_child)
                 entry_list.append(sec_entry)
                 content_sublist = content[sec_list[i] + 1:sec_list[i + 1]]
                 entry_list += parse_latex_content(content_sublist, sec_entry.key)

@@ -42,8 +42,8 @@ def get_child_of_entry(key):
 def create_test_entries():
     entry1 = Entry('Sec 1', '', 'First Section', 'title', 1)
     entry2 = Entry('Sec 2', '', 'Second Section', 'title', 2)
-    entry3 = Entry('Sec 1.1', 'Sec 1', 'First Subsection', 'title', 1)
-    entry4 = Entry('Sec 1.2', 'Sec 1', 'Second Subsection', 'title', 2)
+    entry3 = Entry('Sec 1.1', 'Sec 1', 'First Subsection', 'title', 2)
+    entry4 = Entry('Sec 1.2', 'Sec 1', 'Second Subsection', 'title', 3)
     entry5 = Entry('Sec 2 p1', 'Sec 2', 'first paragraph', 'paragraph', 1)
     entry6 = Entry('Sec 2 p2', 'Sec 2', 'second paragraph', 'paragraph', 2)
     entry7 = Entry('Sec 2 eq3', 'Sec 2', '$$\\int_0^1 x^2 dx = \\frac{1}{3}$$', 'equation', 3)
@@ -52,15 +52,15 @@ def create_test_entries():
     entry10 = Entry('Sec 1.1.1.1.1', 'Sec 1.1.1.1', 'First sub4section', 'title', 1)
     entry11 = Entry('Sec 1.1.1.1.1 p1', 'Sec 1.1.1.1.1', 'sub4section paragraph', 'paragraph', 1)
     entry12 = Entry('Sec 2 ol4', 'Sec 2', '', 'ordered_list', 4)
-    entry13 = Entry('Sec 2 ul5', 'Sec 2', '', 'list', 5)
+    entry13 = Entry('Sec 1 ul1', 'Sec 1', '', 'list', 1)
     entry14 = Entry('Sec 2 ol4 li1', 'Sec 2 ol4', '', 'list_item', 1)
     entry15 = Entry('Sec 2 ol4 li2', 'Sec 2 ol4', '', 'list_item', 2)
     entry17 = Entry('Sec 2 ol4 li1 p1', 'Sec 2 ol4 li1', 'list content:', 'paragraph', 1)
     entry18 = Entry('Sec 2 ol4 li1 eq2', 'Sec 2 ol4 li1', '$$x^3+y^3=1$$', 'equation', 2)
-    entry16 = Entry('Sec 2 ul5 li1', 'Sec 2 ul5', '', 'list_item', 1)
-    entry19 = Entry('Sec 2 ul5 li2', 'Sec 2 ul5', '', 'list_item', 2)
+    entry16 = Entry('Sec 1 ul1 li1', 'Sec 1 ul1', '', 'list_item', 1)
+    entry19 = Entry('Sec 1 ul1 li2', 'Sec 1 ul1', '', 'list_item', 2)
     add_or_update_entries([entry1, entry2, entry3, entry4, entry5, entry6, entry7, entry8, entry9, entry10, entry11])
-    add_or_update_entries([entry12, entry13, entry14, entry15, entry16, entry17, entry18])
+    add_or_update_entries([entry12, entry13, entry14, entry15, entry16, entry17, entry18, entry19])
 
 def get_key_list(entry_keys):
     key_list = []
