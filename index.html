@@ -165,7 +165,7 @@
             {%- endif %}
             {%- if sub3section.type == "list_item" %}
             <div class="list_item"> <li>
-            {%- endif %}                
+            {%- endif %}
             {%- for sub4section in sub3section.children %}
             <div id="{{ sub4section.key }}" class="section sec-{{ sub4section.type }}">
               {%- if sub4section.type == "title" %}
@@ -179,6 +179,15 @@
                 <p>{{ sub4section.content }}</p>
               </div>
               {%- endif %}
+              {%- if sub4section.type == "ordered_list" %}
+              <div class="ordered_list"> <ol>
+              {%- endif %}
+              {%- if sub4section.type == "list" %}
+              <div class="list"> <ul>
+              {%- endif %}
+              {%- if sub4section.type == "list_item" %}
+              <div class="list_item"> <li>
+              {%- endif %}
               {%- for sub5section in sub4section.children %}
               <div id="{{ sub5section.key }}" class="section sec-{{ sub5section.type }}">
                 {%- if sub5section.type == "equation" %}
@@ -188,6 +197,24 @@
                 <div class="paragraph">
                   <p>{{ sub5section.content }}</p>
                 </div>
+                {%- endif %}
+                {%- if sub5section.type == "ordered_list" %}
+                <div class="ordered_list"> <ol>
+                {%- endif %}
+                {%- if sub5section.type == "list" %}
+                <div class="list"> <ul>
+                {%- endif %}
+                {%- if sub5section.type == "list_item" %}
+                <div class="list_item"> <li>
+                {%- endif %}
+                {%- if sub5section.type == "ordered_list" %}
+                </ol> </div>
+                {%- endif %}
+                {%- if sub5section.type == "list" %}
+                </ul> </div>
+                {%- endif %}
+                {%- if sub5section.type == "list_item" %}
+                </li> </div>
                 {%- endif %}
               </div>
               {%- endfor %}
@@ -199,7 +226,7 @@
               {%- endif %}
               {%- if sub4section.type == "list_item" %}
               </li> </div>
-              {%- endif %}                              
+              {%- endif %}
             </div>
             {%- endfor %} 
             {%- if sub3section.type == "ordered_list" %}
@@ -210,7 +237,7 @@
             {%- endif %}
             {%- if sub3section.type == "list_item" %}
             </li> </div>
-            {%- endif %}              
+            {%- endif %}
           </div>
           {%- endfor %}
           {%- if subsubsection.type == "ordered_list" %}
