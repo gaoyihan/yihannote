@@ -53,9 +53,9 @@ def create_latex_node(content, root_key, child_index):
         for indicator in equation_indicator:
             if indicator in line:
                 type = 'equation'
-    if '\\begin{enumerate}' in content[0]:
+    if ('\\begin{enumerate}' in content[0]) and ('\\end{enumerate}' in content[-1]):
         type = 'ordered_list'
-    if '\\begin{itemize}' in content[0]:
+    if ('\\begin{itemize}' in content[0]) and ('\\end{itemize}' in content[-1]):
         type = 'list'
     if '\\item' in content[0]:
         type = 'list_item'
