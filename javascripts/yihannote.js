@@ -45,13 +45,7 @@ yihannote.onNoteBodyClick = function(event) {
                 document.getElementById('editFormParentKey').value = response.parent_key;
                 document.getElementById('editFormContent').value = response.content; 
                 document.getElementById('editFormChildIndex').value = response.child_index;
-                if (response.type === 'title') {
-                    document.getElementById('editFormTypeTitle').checked = true;
-                } else if (response.type === 'equation') {
-                    document.getElementById('editFormTypeEquation').checked = true;
-                } else if (response.type === 'paragraph') {
-                    document.getElementById('editFormTypeParagraph').checked = true;
-                }
+                document.getElementById('editFormType_' + response.type).checked = true;
             }
         };
     

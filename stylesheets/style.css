@@ -103,13 +103,13 @@ div#leftMenu button, div#leftMenu a {
   width: 100%;
   border: 5px;
   border-radius: 5px;
-  margin-top: 10px;
   font-size: 20px;
   text-align: center;
   display: block;
 }
 
 div#leftMenu button {
+  margin-top: 10px;
   background-color: lightgreen;
 }
 
@@ -117,6 +117,32 @@ div#leftMenu a {
   background-color: darkslateblue;
   text-decoration: none;
   color: white;
+}
+
+div#anchorMenu div.sectionAnchor {
+  margin-top: 10px;
+}
+
+div.sectionAnchor {
+  width: 100%;
+  margin: 10px 0 0 0;
+}
+
+div#leftMenu div.sectionAnchor:hover>div.submenu {
+  display: block;
+}
+
+div#leftMenu div.submenu {
+  left: 100%;
+  top: -10px;
+  width: 100%;
+  position: absolute;
+  display: none;
+  z-index: 2;
+}
+
+div#leftMenu div.submenu:hover {
+  display: block;
 }
 
 html,body {

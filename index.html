@@ -25,7 +25,27 @@
       <div id="anchorMenu">
         {%- for section in sections %}
         {%- if section.type == 'title' %}
-        <a href="#{{ section.key }}">{{ section.content }}</a>
+        <div class="sectionAnchor">
+          <a href="#{{ section.key }}">{{ section.content }}</a>
+          <div class="submenu">
+          {%- for subsection in section.children %}
+          {%- if subsection.type == 'title' %}
+            <div class="sectionAnchor">
+              <a href="#{{ subsection.key }}">{{ subsection.content }}</a>
+              <div class="submenu">
+              {%- for subsubsection in subsection.children %}
+              {%- if subsubsection.type == 'title' %}
+                <div class="sectionAnchor">
+                  <a href="#{{ subsubsection.key }}">{{ subsubsection.content }}</a>
+                </div>
+              {%- endif %}
+              {%- endfor %}
+              </div>
+            </div>
+          {%- endif %}
+          {%- endfor %}
+          </div>
+        </div>
         {%- endif %}
         {%- endfor %}
       </div>
@@ -66,9 +86,12 @@
             Type:
           </div>
           <div class="radiobuttons">
-            <input type="radio" name="type" id="editFormTypeTitle" value="title"/>Title
-            <input type="radio" name="type" id="editFormTypeEquation" value="equation"/>Equation
-            <input type="radio" name="type" id="editFormTypeParagraph" value="paragraph"/>Paragraph
+            <input type="radio" name="type" id="editFormType_title" value="title"/>Title
+            <input type="radio" name="type" id="editFormType_equation" value="equation"/>Equation
+            <input type="radio" name="type" id="editFormType_paragraph" value="paragraph"/>Paragraph
+            <input type="radio" name="type" id="editFormType_list" value="list"/>List
+            <input type="radio" name="type" id="editFormType_ordered_list" value="ordered_list"/>Ordered List
+            <input type="radio" name="type" id="editFormType_list_item" value="list_item"/>List Item
           </div>
           <div class="textWrapper">
             Content:
