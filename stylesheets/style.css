@@ -166,6 +166,8 @@ div#noteBody {
   right: 0;
   bottom: 0;
   top: 32px;
+  font-family: sans-serif;
+  line-height: 130%;
   position: absolute;
   overflow: auto;
 }

@@ -51,13 +51,23 @@ def parse_paragraph(content):
     elif '\\href{' in content:
         start_index = content.find('\\href{')
         end_first_param = content.find('}{', start_index)
-        end_index = content.find('}', end_first_param + 1)
+        end_index = content.find('}', end_first_param + 2)
         first_half = parse_paragraph(content[:start_index])
         second_half = parse_paragraph(content[end_index + 1:])
         mid = ContentTree('', content[end_first_param + len('}{'):end_index], 'anchor', 0)
         mid.href = content[start_index + len('\\href{'):end_first_param]
         if mid.href[0] == '.':
             mid.href = mid.href[1:]
+        return first_half + [mid] + second_half
+    elif '\\hyperref[' in content:
+        start_index = content.find('\\hyperref[')
+        end_first_param = content.find(']{', start_index)
+        end_index = content.find('}', end_first_param + 2)
+        first_half = parse_paragraph(content[:start_index])
+        second_half = parse_paragraph(content[end_index + 1:])
+        mid = ContentTree('', content[end_first_param + len(']{'):end_index], 'anchor', 0)
+        mid.href = content[start_index + len('\\hyperref['):end_first_param]
+        mid.href = '#' + mid.href
         return first_half + [mid] + second_half
     else:
         return [ContentTree('', ' ' + content, 'text', 0)]
