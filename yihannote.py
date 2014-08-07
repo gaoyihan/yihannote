@@ -60,7 +60,7 @@ def parse_paragraph(content):
             mid.href = mid.href[1:]
         return first_half + [mid] + second_half
     else:
-        return [ContentTree('', content, 'text', 0)]
+        return [ContentTree('', ' ' + content, 'text', 0)]
 
 def post_process(sections):
     for section in sections:
