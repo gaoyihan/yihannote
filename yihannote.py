@@ -40,6 +40,36 @@ def generate_hierarchy(entries):
     root_nodes.sort(key=lambda x:x.child_index)
     return root_nodes
 
+def parse_paragraph(content):
+    if '\\textbf{' in content:
+        start_index = content.find('\\textbf{')
+        end_index = content.find('}', start_index)
+        first_half = parse_paragraph(content[:start_index])
+        second_half = parse_paragraph(content[end_index + 1:])
+        mid = ContentTree('', content[start_index + len('\\textbf{'):end_index], 'bold', 0)
+        return first_half + [mid] + second_half
+    elif '\\href{' in content:
+        start_index = content.find('\\href{')
+        end_first_param = content.find('}{', start_index)
+        end_index = content.find('}', end_first_param + 1)
+        first_half = parse_paragraph(content[:start_index])
+        second_half = parse_paragraph(content[end_index + 1:])
+        mid = ContentTree('', content[end_first_param + len('}{'):end_index], 'anchor', 0)
+        mid.href = content[start_index + len('\\href{'):end_first_param]
+        if mid.href[0] == '.':
+            mid.href = mid.href[1:]
+        return first_half + [mid] + second_half
+    else:
+        return [ContentTree('', content, 'text', 0)]
+
+def post_process(sections):
+    for section in sections:
+        if section.type == 'paragraph':
+            parsed_paragraph = parse_paragraph(section.content)
+            section.children += parsed_paragraph
+        else:
+            post_process(section.children)
+
 def get_subtree(key):
     children = datastore.get_child_of_entry(key)
     list = [datastore.get_entries([key])[0].key]
@@ -59,6 +89,7 @@ def get_hierarchy_level(key):
 class MainPage(webapp2.RequestHandler):
     def get(self):
         entries = datastore.get_all_entries()
+        # Get User Information, Generate Welcome Message, Display edit page if user is admin
         user = users.get_current_user()
         allow_modification = False
         if user:
@@ -71,8 +102,11 @@ class MainPage(webapp2.RequestHandler):
             login_logout_message = 'Welcome, guest!'
             login_logout_url = users.create_login_url('/')
             login_logout_linktext = 'Sign in or register'
+        # Render the template
+        sections = generate_hierarchy(entries)
+        post_process(sections)
         template_values = {
-            'sections': generate_hierarchy(entries),
+            'sections': sections,
             'login_logout_message': login_logout_message,
             'login_logout_url': login_logout_url,
             'login_logout_linktext': login_logout_linktext,
@@ -96,6 +130,8 @@ class NodeInfo(webapp2.RequestHandler):
         
 class EditEntry(webapp2.RequestHandler):
     def post(self):
+        if not users.is_current_user_admin():
+            self.redirect('/')
         key = self.request.get('key')
         parent_key = self.request.get('parent_key')
         content = self.request.get('content')
@@ -121,6 +157,8 @@ class LatexContent(webapp2.RequestHandler):
 
 class LatexPost(webapp2.RequestHandler):
     def post(self):
+        if not users.is_current_user_admin():
+            self.redirect('/')
         key = self.request.get('key')
         content = self.request.get('content')
         root_entry = datastore.get_entries([key])[0]

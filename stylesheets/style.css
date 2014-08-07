@@ -212,3 +212,7 @@ h5 {
   font-size: 1em;
   margin: 1em 0;
 }
+
+div#noteBody span.bold {
+  font-weight: bold;
+}

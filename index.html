@@ -112,7 +112,19 @@
       {%- endif %}
       {%- if section.type == "paragraph" %}
       <div class="paragraph">
-      <p>{{ section.content }}</p>
+        <p>
+        {%- for child in section.children %}
+          {%- if child.type == 'bold' %}
+          <span class="bold">{{ child.content }}</span>
+          {%- endif %}
+          {%- if child.type == 'anchor' %}
+          <a href="{{ child.href }}">{{ child.content }}</a>
+          {%- endif %}
+          {%- if child.type == 'text' %}
+          <span>{{ child.content }}</span>
+          {%- endif %}
+        {%- endfor %}
+        </p>
       </div>
       {%- endif %}
       {%- if section.type == "ordered_list" %}
@@ -134,7 +146,19 @@
         {%- endif %}
         {%- if subsection.type == "paragraph" %}
         <div class="paragraph">
-          <p>{{ subsection.content }}</p>
+          <p>
+          {%- for child in subsection.children %}
+            {%- if child.type == 'bold' %}
+            <span class="bold">{{ child.content }}</span>
+            {%- endif %}
+            {%- if child.type == 'anchor' %}
+            <a href="{{ child.href }}">{{ child.content }}</a>
+            {%- endif %}
+            {%- if child.type == 'text' %}
+            <span>{{ child.content }}</span>
+            {%- endif %}
+          {%- endfor %}
+          </p>
         </div>
         {%- endif %}
         {%- if subsection.type == "ordered_list" %}
@@ -156,7 +180,19 @@
           {%- endif %}
           {%- if subsubsection.type == "paragraph" %}
           <div class="paragraph">
-            <p>{{ subsubsection.content }}</p>
+            <p>
+            {%- for child in subsubsection.children %}
+              {%- if child.type == 'bold' %}
+              <span class="bold">{{ child.content }}</span>
+              {%- endif %}
+              {%- if child.type == 'anchor' %}
+              <a href="{{ child.href }}">{{ child.content }}</a>
+              {%- endif %}
+              {%- if child.type == 'text' %}
+              <span>{{ child.content }}</span>
+              {%- endif %}
+            {%- endfor %}
+            </p>
           </div>
           {%- endif %}
           {%- if subsubsection.type == "ordered_list" %}
@@ -178,7 +214,19 @@
             {%- endif %}
             {%- if sub3section.type == "paragraph" %}
             <div class="paragraph">
-              <p>{{ sub3section.content }}</p>
+              <p>
+              {%- for child in sub3section.children %}
+                {%- if child.type == 'bold' %}
+                <span class="bold">{{ child.content }}</span>
+                {%- endif %}
+                {%- if child.type == 'anchor' %}
+                <a href="{{ child.href }}">{{ child.content }}</a>
+                {%- endif %}
+                {%- if child.type == 'text' %}
+                <span>{{ child.content }}</span>
+                {%- endif %}
+              {%- endfor %}
+              </p>
             </div>
             {%- endif %}
             {%- if sub3section.type == "ordered_list" %}
@@ -200,7 +248,19 @@
               {%- endif %}
               {%- if sub4section.type == "paragraph" %}
               <div class="paragraph">
-                <p>{{ sub4section.content }}</p>
+                <p>
+                {%- for child in sub4section.children %}
+                  {%- if child.type == 'bold' %}
+                  <span class="bold">{{ child.content }}</span>
+                  {%- endif %}
+                  {%- if child.type == 'anchor' %}
+                  <a href="{{ child.href }}">{{ child.content }}</a>
+                  {%- endif %}
+                  {%- if child.type == 'text' %}
+                  <span>{{ child.content }}</span>
+                  {%- endif %}
+                {%- endfor %}
+                </p>
               </div>
               {%- endif %}
               {%- if sub4section.type == "ordered_list" %}
@@ -219,7 +279,19 @@
                 {%- endif %}
                 {%- if sub5section.type == "paragraph" %}
                 <div class="paragraph">
-                  <p>{{ sub5section.content }}</p>
+                  <p>
+                  {%- for child in sub5section.children %}
+                    {%- if child.type == 'bold' %}
+                    <span class="bold">{{ child.content }}</span>
+                    {%- endif %}
+                    {%- if child.type == 'anchor' %}
+                    <a href="{{ child.href }}">{{ child.content }}</a>
+                    {%- endif %}
+                    {%- if child.type == 'text' %}
+                    <span>{{ child.content }}</span>
+                    {%- endif %}
+                  {%- endfor %}
+                  </p>
                 </div>
                 {%- endif %}
                 {%- if sub5section.type == "ordered_list" %}
@@ -238,7 +310,19 @@
                   {%- endif %}
                   {%- if sub6section.type == "paragraph" %}
                   <div class="paragraph">
-                    <p>{{ sub6section.content }}</p>
+                    <p>
+                    {%- for child in sub6section.children %}
+                      {%- if child.type == 'bold' %}
+                      <span class="bold">{{ child.content }}</span>
+                      {%- endif %}
+                      {%- if child.type == 'anchor' %}
+                      <a href="{{ child.href }}">{{ child.content }}</a>
+                      {%- endif %}
+                      {%- if child.type == 'text' %}
+                      <span>{{ child.content }}</span>
+                      {%- endif %}
+                    {%- endfor %}
+                    </p>
                   </div>
                   {%- endif %}
                   {%- if sub6section.type == "ordered_list" %}
