@@ -49,16 +49,33 @@ div.radiobuttons {
   font-size: 16px;
 }
 
-input.submit {
-  width: 60%;
-  margin-left: 20%;
-  display: block;
+.button {
   text-align: center;
   background-color: #FFBC00;
   color: white;
-  font-size: 20px;
+  font-size: 18px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.center {
+  width: 60%;
+  margin-left: 20%;
+  display: block;
+}
+
+.left {
+  width: 40%;
+  margin-left: 8%;
+}
+
+.right {
+  width: 40%;
+  margin-left: 4%;
+}
+
+div.buttonWrapper {
+  margin-top: 5px;
 }
 
 div.editing div.section:hover {
