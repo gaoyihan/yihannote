@@ -60,7 +60,9 @@
           </div>
           <textarea name="content" id="latexFormContent"></textarea>
           <input type="hidden" name="key" id="latexFormKey"/>
-          <input type="submit" value="Submit" class="submit">
+          <div class="buttonWrapper">
+            <input type="submit" value="Submit" class="button center">
+          </div>
         </form>
       </div>
     </div>
@@ -97,7 +99,10 @@
             Content:
           </div>
           <textarea name="content" id="editFormContent"></textarea>
-          <input type="submit" value="Submit" class="submit">
+          <div class="buttonWrapper">
+            <input type="submit" value="Submit" class="button left">
+            <button onclick="yihannote.addChild(event)" class="button right">Add Child</button>
+          </div>
         </form>
       </div>
     </div>

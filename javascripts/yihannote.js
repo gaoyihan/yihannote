@@ -41,6 +41,7 @@ yihannote.onNoteBodyClick = function(event) {
             if (this.readyState == 4 && this.status == 200) {
                 yihannote.changeMode('inEdit');
                 var response = JSON.parse(this.responseText);
+                yihannote.editKey = response.key;
                 document.getElementById('editFormKey').value = response.key;
                 document.getElementById('editFormParentKey').value = response.parent_key;
                 document.getElementById('editFormContent').value = response.content; 
@@ -88,10 +89,24 @@ yihannote.onLatexFormContainerClick = function(event) {
     if (event.target.className === 'FormBackground') {
         yihannote.changeMode('latex');
     }
-}
+};
 
 yihannote.onEditFormContainerClick = function(event) {
     if (event.target.className === 'FormBackground') {
         yihannote.changeMode('edit');
     }
+};
+
+yihannote.addChild = function(event) {
+    event.preventDefault();
+    document.getElementById('editFormParentKey').value = yihannote.editKey;
+    suffix = '';
+    if (document.getElementById('editFormType_title').checked) suffix = '.';
+    if (document.getElementById('editFormType_paragraph').checked) suffix = ' p';
+    if (document.getElementById('editFormType_equation').checked) suffix = ' eq';
+    if (document.getElementById('editFormType_ordered_list').checked) suffix = ' ol';
+    if (document.getElementById('editFormType_list').checked) suffix = ' ul';
+    if (document.getElementById('editFormType_list_item').checked) suffix = ' li';
+    suffix += document.getElementById('editFormChildIndex').value;
+    document.getElementById('editFormKey').value = yihannote.editKey + suffix;
 };
