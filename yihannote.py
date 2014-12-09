@@ -149,7 +149,7 @@ class EditEntry(webapp2.RequestHandler):
         type = self.request.get('type')
         entry = datastore.Entry(key, parent_key, content, type, child_index)
         datastore.add_or_update_entries([entry])
-        self.redirect('/')
+        self.redirect('/#' + key)
         
 class LatexContent(webapp2.RequestHandler):
     def get(self):
