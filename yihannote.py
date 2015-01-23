@@ -128,13 +128,19 @@ class MainPage(webapp2.RequestHandler):
 class NodeInfo(webapp2.RequestHandler):
     def get(self):
         key = self.request.get('key')
-        object = datastore.get_entries([key])[0]
+        node = datastore.get_entries([key])[0]
+        children = datastore.get_child_of_entry(key)
+        def to_dict(node):
+            return {
+                'key': node.key,
+                'parent_key': node.parent_key,
+                'type': node.type,
+                'child_index': node.child_index,
+                'content': node.content
+            }
         json_object = {
-            'key':object.key, 
-            'parent_key':object.parent_key, 
-            'content':object.content, 
-            'child_index':object.child_index,
-            'type':object.type
+            'node': to_dict(node), 
+            'children': map(to_dict, children)
         }
         self.response.write(json.dumps(json_object))
         
@@ -186,4 +192,5 @@ application = webapp2.WSGIApplication([
     ('/LatexPost', LatexPost)
 ], debug=True)
 
+# For Debugging
 #datastore.create_test_entries()

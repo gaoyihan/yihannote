@@ -70,40 +70,48 @@
       <div class="FormBackground">
       </div>
       <div class="Form">
-        <form action="/EditEntry" method="post">
+        <div class="FormLeftPanel">
           <div class="textWrapper">
-            Key:
+            Node Hierarchy
           </div>
-          <input type="text" name="key" id="editFormKey" placeholder="Key"/>
-          <div class="textWrapper">
-            Parent Key:
+          <div class="nodeHierarchy">
+            <div id="nodeContainer">
+            </div>
+            <div class="rightSideButtons">
+              <button type="button" id="moveUp"> 
+                <img src="images/moveUp.png">
+              </button>
+              <button type="button" id="moveDown">
+                <img src="images/moveDown.png">
+              </button>
+              <button type="button" id="addChild">
+                <img src="images/addChild.png">
+              </button>
+            </div>
           </div>
-          <input type="text" name="parent_key" id="editFormParentKey" placeholder="Parent Key"/>
-          <div class="textWrapper">
-            Child Index:
-          </div>
-          <input type="text" name="child_index" id="editFormChildIndex" 
-            placeholder="Child Index"/>
+        </div>
+        <div class="FormRightPanel">
           <div class="textWrapper">
             Type:
           </div>
           <div class="radiobuttons">
-            <input type="radio" name="type" id="editFormType_title" value="title"/>Title
-            <input type="radio" name="type" id="editFormType_equation" value="equation"/>Equation
-            <input type="radio" name="type" id="editFormType_paragraph" value="paragraph"/>Paragraph
-            <input type="radio" name="type" id="editFormType_list" value="list"/>List
-            <input type="radio" name="type" id="editFormType_ordered_list" value="ordered_list"/>Ordered List
-            <input type="radio" name="type" id="editFormType_list_item" value="list_item"/>List Item
+            <div><input type="radio" id="editFormType_title"/>Title</div>
+            <div><input type="radio" id="editFormType_equation"/>Equation</div>
+            <div><input type="radio" id="editFormType_paragraph"/>Paragraph</div>
+            <div><input type="radio" id="editFormType_list"/>List</div>
+            <div><input type="radio" id="editFormType_ordered_list"/>Ordered List</div>
+            <div><input type="radio" id="editFormType_list_item"/>List Item</div>
           </div>
           <div class="textWrapper">
             Content:
           </div>
           <textarea name="content" id="editFormContent"></textarea>
           <div class="buttonWrapper">
-            <input type="submit" value="Submit" class="button left">
-            <button onclick="yihannote.addChild(event)" class="button right">Add Child</button>
+            <button type="button" class="button center" onclick="yihannote.submitEditForm()">
+              Submit
+            </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
     <div id="noteBody">
