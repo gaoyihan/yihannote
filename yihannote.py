@@ -143,19 +143,24 @@ class NodeInfo(webapp2.RequestHandler):
             'children': map(to_dict, children)
         }
         self.response.write(json.dumps(json_object))
-        
+                   
 class EditEntry(webapp2.RequestHandler):
     def post(self):
         if not users.is_current_user_admin():
             self.redirect('/')
-        key = self.request.get('key')
-        parent_key = self.request.get('parent_key')
-        content = self.request.get('content')
-        child_index = int(self.request.get('child_index'))
-        type = self.request.get('type')
-        entry = datastore.Entry(key, parent_key, content, type, child_index)
-        datastore.add_or_update_entries([entry])
-        self.redirect('/#' + key)
+        nodes = self.request.get('nodes')
+        return_key = self.request.get('return_key')
+        update_list = []
+        for node in nodes:
+            key = node.key
+            parent_key = node.parent_key
+            content = node.content
+            type = node.type
+            child_index = node.child_index
+            entry = datastore.Entry(key, parent_key, content, type, child_index)
+            update_list.append(entry)
+        datastore.add_or_update_entries(update_list)
+        self.redirect('/#' + return_key)
         
 class LatexContent(webapp2.RequestHandler):
     def get(self):

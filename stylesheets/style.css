@@ -57,6 +57,10 @@ div.nodeHierarchy {
   position: absolute;
 }
 
+div.nodeHierarchyDiv {
+  white-space: nowrap;
+}
+
 div.nodeHierarchy div.rightSideButtons {
   width: 50px;
   left: 100%;
@@ -77,6 +81,7 @@ div.rightSideButtons button img {
 div#nodeContainer {
   margin-right: 50px;
   position: absolute;
+  width: 220px;
   height: 100%;
   overflow: auto;
 }

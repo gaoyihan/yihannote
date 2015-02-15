@@ -30,28 +30,54 @@ yihannote.changeMode = function(mode) {
     yihannote.mode = mode;
 };
 
-yihannote.NodeHierarchyFillContent = function(root, depth, lastChild) {
+yihannote.selectNode = function(node) {
+    types = ['title', 'equation', 'paragraph', 'list', 'ordered_list', 'list_item'];
+    for (var i = 0; i < types.length; i++ )
+        document.getElementById('editFormType_' + types[i]).checked = false;
+    document.getElementById('editFormType_' + node.type).checked = true;
+    document.getElementById('editFormContent').value = node.content;   
+};
+
+yihannote.expandNode = function(node) {
+    var ajaxResponseHandler = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            for (var i = 0; i < response.children.length; i++) {
+                yihannote.editFormAddNode(response.children[i]);
+            }
+            yihannote.resetNodeHierarchy();
+        }
+    };
+    
+    var req = new XMLHttpRequest();
+    req.open('GET', '/NodeInfo?key=' + node.key);
+    req.onreadystatechange = ajaxResponseHandler;
+    req.send();    
+};
+
+yihannote.fillNodeHierarchy = function(root, depth, lastChild) {
     // Add node to html
     var active_list = yihannote.editFormActiveNodes;
     var node = active_list[root];
     var div = document.createElement('div');
-    console.log(active_list);
-    console.log(root + ',' + depth);
-    console.log(node);
+    div.className = 'nodeHierarchyDiv';
 
     // Add tree's branch
     for (var i = 0; i < depth - 1; i++ ) {
-        var vertical = document.createElement('img');
-        vertical.src = 'images/vertical.png';
-        div.appendChild(vertical);
+        var img = document.createElement('img');
+        if (lastChild[i])
+            img.src = 'images/blank.png';
+        else
+            img.src = 'images/vertical.png';
+        div.appendChild(img);
     }
     if (depth > 0) {
-        var corner = document.createElement('img');
-        if (lastChild)
-            corner.src = 'images/corner.png';
+        var img = document.createElement('img');
+        if (lastChild[depth - 1])
+            img.src = 'images/corner.png';
         else
-            corner.src = 'images/triway.png';
-        div.appendChild(corner);
+            img.src = 'images/triway.png';
+        div.appendChild(img);
     }
 
     // Add tree's node
@@ -62,6 +88,14 @@ yihannote.NodeHierarchyFillContent = function(root, depth, lastChild) {
     if (text.length == 0)
         text = 'untitled';
     nodeContent.appendChild(document.createTextNode(text));
+    var click_event = function() {
+        yihannote.selectNode(node);
+    };
+    nodeContent.addEventListener('click', click_event);
+    var dblclick_event = function() {
+        yihannote.expandNode(node);
+    }
+    nodeContent.addEventListener('dblclick', dblclick_event);
     div.appendChild(nodeContent);
 
     // Add the div node to container
@@ -80,12 +114,14 @@ yihannote.NodeHierarchyFillContent = function(root, depth, lastChild) {
         return active_list[a].child_index - active_list[b].child_index;
     };
     childList.sort(compare_function);
+    lastChild[depth] = false;
     for (var i = 0; i < childList.length - 1; i++ ) {
-        yihannote.NodeHierarchyFillContent(childList[i], depth + 1, false);
+        yihannote.fillNodeHierarchy(childList[i], depth + 1, lastChild);
     }
     if (childList.length > 0) {
-        yihannote.NodeHierarchyFillContent(childList[childList.length - 1],
-            depth + 1, true); 
+        lastChild[depth] = true;
+        yihannote.fillNodeHierarchy(childList[childList.length - 1],
+            depth + 1, lastChild); 
     }
 };
 
@@ -97,12 +133,17 @@ yihannote.resetNodeHierarchy = function() {
     var active_list = yihannote.editFormActiveNodes;
     for (var i = 0; i < active_list.length; i++ )
     if (active_list[i].key == yihannote.editKey)
-        yihannote.NodeHierarchyFillContent(i, 0, false);       
+        yihannote.fillNodeHierarchy(i, 0, []);
 };
 
 yihannote.editFormAddNode = function(node) {
-    // Incorrect implementation, we should detect duplicates
-    yihannote.editFormActiveNodes.push(node);
+    var exist = false;
+    var active_list = yihannote.editFormActiveNodes;
+    for (var i = 0; i < active_list.length; i++ )
+        if (active_list[i].key == node.key)
+            exist = true;
+    if (!exist)
+        yihannote.editFormActiveNodes.push(node);
 };
 
 yihannote.initEditForm = function(response) {
@@ -142,7 +183,7 @@ yihannote.onNoteBodyClick = function(event) {
                 document.getElementById('latexFormKey').value = response.key;
                 document.getElementById('latexFormContent').value = response.content;
             }
-        }
+        };
         
         var req = new XMLHttpRequest();
         req.open('GET', '/LatexContent?key=' + targetNode.id);
