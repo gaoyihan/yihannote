@@ -30,8 +30,21 @@ yihannote.changeMode = function(mode) {
     yihannote.mode = mode;
 };
 
-yihannote.selectNode = function(node) {
-    types = ['title', 'equation', 'paragraph', 'list', 'ordered_list', 'list_item'];
+yihannote.editFormUpdateNode = function(index) {
+    if (index == -1) return;
+    var node = yihannote.editFormActiveNodes[index];
+    node.content = document.getElementById('editFormContent').value;
+    var types = ['title', 'equation', 'paragraph', 'list', 'ordered_list', 'list_item'];
+    for (var i = 0; i < types.length; i++ )
+    if (document.getElementById('editFormType_' + types[i]).checked)
+        node.type = types[i];
+};
+
+yihannote.selectNode = function(index) {
+    yihannote.editFormUpdateNode(yihannote.selectedNode);
+    yihannote.selectedNode = index;
+    var node = yihannote.editFormActiveNodes[index];
+    var types = ['title', 'equation', 'paragraph', 'list', 'ordered_list', 'list_item'];
     for (var i = 0; i < types.length; i++ )
         document.getElementById('editFormType_' + types[i]).checked = false;
     document.getElementById('editFormType_' + node.type).checked = true;
@@ -53,6 +66,23 @@ yihannote.expandNode = function(node) {
     req.open('GET', '/NodeInfo?key=' + node.key);
     req.onreadystatechange = ajaxResponseHandler;
     req.send();    
+};
+
+yihannote.submitEditForm = function() {
+    yihannote.editFormUpdateNode(yihannote.selectedNode);
+
+    var ajaxResponseHandler = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            window.location.href = '/#' + yihannote.editKey;
+            window.location.reload();
+        }
+    };
+
+    var req = new XMLHttpRequest();
+    req.open('POST', '/EditEntry');
+    req.setRequestHeader('Content-type', 'application/json');
+    req.onreadystatechange = ajaxResponseHandler;
+    req.send(JSON.stringify(yihannote.editFormActiveNodes));
 };
 
 yihannote.fillNodeHierarchy = function(root, depth, lastChild) {
@@ -89,7 +119,7 @@ yihannote.fillNodeHierarchy = function(root, depth, lastChild) {
         text = 'untitled';
     nodeContent.appendChild(document.createTextNode(text));
     var click_event = function() {
-        yihannote.selectNode(node);
+        yihannote.selectNode(root);
     };
     nodeContent.addEventListener('click', click_event);
     var dblclick_event = function() {
@@ -148,11 +178,13 @@ yihannote.editFormAddNode = function(node) {
 
 yihannote.initEditForm = function(response) {
     yihannote.editKey = response.node.key;
+    yihannote.selectedNode = -1;
     yihannote.editFormActiveNodes = [];
     yihannote.editFormAddNode(response.node);
     for (var i = 0; i < response.children.length; i++) {
         yihannote.editFormAddNode(response.children[i]);
     }
+    yihannote.selectNode(0);
 };
 
 yihannote.onNoteBodyClick = function(event) {

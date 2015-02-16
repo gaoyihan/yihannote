@@ -148,19 +148,18 @@ class EditEntry(webapp2.RequestHandler):
     def post(self):
         if not users.is_current_user_admin():
             self.redirect('/')
-        nodes = self.request.get('nodes')
-        return_key = self.request.get('return_key')
+        nodes = json.loads(self.request.body)
         update_list = []
         for node in nodes:
-            key = node.key
-            parent_key = node.parent_key
-            content = node.content
-            type = node.type
-            child_index = node.child_index
+            key = node['key']
+            parent_key = node['parent_key']
+            content = node['content']
+            type = node['type']
+            child_index = node['child_index']
             entry = datastore.Entry(key, parent_key, content, type, child_index)
             update_list.append(entry)
         datastore.add_or_update_entries(update_list)
-        self.redirect('/#' + return_key)
+
         
 class LatexContent(webapp2.RequestHandler):
     def get(self):
