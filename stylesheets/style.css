@@ -96,6 +96,14 @@ div#nodeContainer button {
   position: relative;
 }
 
+div#nodeContainer button.deleted {
+  background-color: grey;
+}
+
+div#nodeContainer button.selected {
+  border: 2px solid red;
+}
+
 div#nodeContainer img {
   margin: 0 0 -4px 0;
   padding: 0;

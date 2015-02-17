@@ -144,7 +144,7 @@ class NodeInfo(webapp2.RequestHandler):
             'children': map(to_dict, children)
         }
         self.response.write(json.dumps(json_object))
-                   
+
 class EditEntry(webapp2.RequestHandler):
     def post(self):
         if not users.is_current_user_admin():
@@ -190,8 +190,7 @@ class EditEntry(webapp2.RequestHandler):
         # might be identical to deleted old_keys
         datastore.delete_entries(delete_list)
         datastore.add_or_update_entries(update_list)
-                
-        
+
 class LatexContent(webapp2.RequestHandler):
     def get(self):
         key = self.request.get('key')

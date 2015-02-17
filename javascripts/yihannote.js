@@ -72,6 +72,14 @@ yihannote.onAddChildClick = function() {
     yihannote.resetNodeHierarchy();
 };
 
+yihannote.onRemoveNodeClick = function() {
+    var node = yihannote.selectedNode;
+    var active_list = yihannote.editFormActiveNodes;
+    var parent_list = yihannote.parentNode;
+    active_list[node].deleted = !active_list[node].deleted;
+    yihannote.resetNodeHierarchy();
+};
+
 yihannote.editFormNewChild = function(node, child_index) {
     var new_child = {};
     new_child.key = 'new_key';
@@ -99,8 +107,9 @@ yihannote.editFormUpdateNode = function(index) {
 };
 
 yihannote.selectNode = function(index) {
-    yihannote.editFormUpdateNode(yihannote.selectedNode);
+    var previous_selected = yihannote.selectedNode;
     yihannote.selectedNode = index;
+    yihannote.editFormUpdateNode(previous_selected);
     var node = yihannote.editFormActiveNodes[index];
     var types = ['title', 'equation', 'paragraph', 'list', 'ordered_list', 'list_item'];
     var disabled = false;
@@ -133,8 +142,26 @@ yihannote.expandNode = function(node) {
     req.send();    
 };
 
+yihannote.propagateDeletedNode = function() {
+    var repeat = true;
+    var active_list = yihannote.editFormActiveNodes;
+    var parent_list = yihannote.parentNode;
+    while (repeat) {
+        repeat = false;
+        for (var i = 0; i < active_list.length; i++ )
+        if (parent_list[i] !== -1) {
+            if (active_list[parent_list[i]].deleted &&
+                !active_list[i].deleted) {
+                active_list[i].deleted = true;
+                repeat = true;
+            }
+        }
+    }
+};
+
 yihannote.submitEditForm = function() {
     yihannote.editFormUpdateNode(yihannote.selectedNode);
+    yihannote.propagateDeletedNode();
 
     var ajaxResponseHandler = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -232,6 +259,12 @@ yihannote.fillNodeHierarchy = function(root, depth, lastChild) {
     if (text.length === 0)
         text = 'untitled';
     nodeContent.appendChild(document.createTextNode(text));
+    nodeContent.className = '';
+    if (node.deleted)
+        nodeContent.className += 'deleted';
+    if (yihannote.selectedNode === root)
+        nodeContent.className += ' selected';
+
     var click_event = function() {
         yihannote.selectNode(root);
     };
@@ -259,6 +292,9 @@ yihannote.fillNodeHierarchy = function(root, depth, lastChild) {
     // Add the div node to container
     var container = document.getElementById('nodeContainer');
     container.appendChild(div);
+
+    // If the node is deleted, we do not go further
+    if (node.deleted) return;
 
     // Recursively build subtrees
     var childList = [];
