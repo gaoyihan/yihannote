@@ -149,7 +149,7 @@ div.buttonWrapper {
   margin-top: 5px;
 }
 
-div.editing div.section:hover {
+div.editing div.sec-title:hover {
   margin: 5px;
   border: 1px solid red;
   border-radius: 5px;

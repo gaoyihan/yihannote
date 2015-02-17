@@ -19,6 +19,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 class ContentTree:
     def __init__(self, key, content, type, child_index):
         self.children = []
+        self.parts = []
         self.key = key
         self.content = content
         self.type = type
@@ -70,13 +71,13 @@ def parse_paragraph(content):
         mid.href = '#' + mid.href
         return first_half + [mid] + second_half
     else:
-        return [ContentTree('', ' ' + content, 'text', 0)]
+        return [ContentTree('', content, 'text', 0)]
 
 def post_process(sections):
     for section in sections:
         if section.type == 'paragraph':
             parsed_paragraph = parse_paragraph(section.content)
-            section.children += parsed_paragraph
+            section.parts += parsed_paragraph
         else:
             post_process(section.children)
 
@@ -149,24 +150,52 @@ class EditEntry(webapp2.RequestHandler):
         if not users.is_current_user_admin():
             self.redirect('/')
         nodes = json.loads(self.request.body)
-        update_list = []
+        # We need this key set to find implicitly updated subtrees
+        old_key_set = set();
         for node in nodes:
-            key = node['key']
-            parent_key = node['parent_key']
-            content = node['content']
-            type = node['type']
-            child_index = node['child_index']
-            entry = datastore.Entry(key, parent_key, content, type, child_index)
-            update_list.append(entry)
-        datastore.add_or_update_entries(update_list)
+            old_key_set.add(node['old_key']);
 
+        update_list = []
+        delete_list = []
+        for node in nodes:
+            old_key = node['old_key']
+            key = node['key']
+            children = datastore.get_child_of_entry(old_key)
+            for child in children:
+                if child.key not in old_key_set:
+                    subtree = get_subtree(child.key)
+                    if node['deleted']:
+                        delete_list += subtree
+                    elif key != old_key:
+                        delete_list += subtree
+                        subtree_entries = datastore.get_entries(subtree)
+                        prefix_len = len(old_key)
+                        for entry in subtree_entries:
+                            entry.key = key + entry.key[prefix_len:]
+                            entry.parent_key = key + entry.parent_key[prefix_len:]
+                        update_list += subtree_entries
+            if node['deleted']:
+                delete_list.append(old_key)
+            else:
+                if old_key != 'new_key' and old_key != key:
+                    delete_list.append(old_key)
+                parent_key = node['parent_key']
+                content = node['content']
+                type = node['type']
+                child_index = node['child_index']
+                entry = datastore.Entry(key, parent_key, content, type, child_index)
+                update_list.append(entry)
+
+        # It is necessary to delete first because the new keys 
+        # might be identical to deleted old_keys
+        datastore.delete_entries(delete_list)
+        datastore.add_or_update_entries(update_list)
+                
         
 class LatexContent(webapp2.RequestHandler):
     def get(self):
         key = self.request.get('key')
         entry = datastore.get_entries([key])[0]
-        while entry.type != 'title':
-            entry = datastore.get_entries([entry.parent_key])[0]
         level = get_hierarchy_level(entry.key)
         latex_content = latex.get_latex_content(entry, level)
         json_object = {

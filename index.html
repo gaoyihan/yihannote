@@ -78,13 +78,13 @@
             <div id="nodeContainer">
             </div>
             <div class="rightSideButtons">
-              <button type="button" id="moveUp"> 
+              <button type="button" id="moveUp" onclick="yihannote.onMoveUpClick()"> 
                 <img src="images/moveUp.png">
               </button>
-              <button type="button" id="moveDown">
+              <button type="button" id="moveDown" onclick="yihannote.onMoveDownClick()">
                 <img src="images/moveDown.png">
               </button>
-              <button type="button" id="addChild">
+              <button type="button" id="addChild" onclick="yihannote.onAddChildClick()">
                 <img src="images/addChild.png">
               </button>
             </div>
@@ -95,12 +95,12 @@
             Type:
           </div>
           <div class="radiobuttons">
-            <div><input type="radio" id="editFormType_title"/>Title</div>
-            <div><input type="radio" id="editFormType_equation"/>Equation</div>
-            <div><input type="radio" id="editFormType_paragraph"/>Paragraph</div>
-            <div><input type="radio" id="editFormType_list"/>List</div>
-            <div><input type="radio" id="editFormType_ordered_list"/>Ordered List</div>
-            <div><input type="radio" id="editFormType_list_item"/>List Item</div>
+            <div><input type="radio" name="type" id="editFormType_title"/>Title</div>
+            <div><input type="radio" name="type" id="editFormType_equation"/>Equation</div>
+            <div><input type="radio" name="type" id="editFormType_paragraph"/>Paragraph</div>
+            <div><input type="radio" name="type" id="editFormType_list"/>List</div>
+            <div><input type="radio" name="type" id="editFormType_ordered_list"/>Ordered List</div>
+            <div><input type="radio" name="type" id="editFormType_list_item"/>List Item</div>
           </div>
           <div class="textWrapper">
             Content:
@@ -126,7 +126,7 @@
       {%- if section.type == "paragraph" %}
       <div class="paragraph">
         <p>
-        {%- for child in section.children %}
+        {%- for child in section.parts %}
           {%- if child.type == 'bold' %}
           <span class="bold">{{ child.content }}</span>
           {%- endif %}
@@ -160,7 +160,7 @@
         {%- if subsection.type == "paragraph" %}
         <div class="paragraph">
           <p>
-          {%- for child in subsection.children %}
+          {%- for child in subsection.parts %}
             {%- if child.type == 'bold' %}
             <span class="bold">{{ child.content }}</span>
             {%- endif %}
@@ -194,7 +194,7 @@
           {%- if subsubsection.type == "paragraph" %}
           <div class="paragraph">
             <p>
-            {%- for child in subsubsection.children %}
+            {%- for child in subsubsection.parts %}
               {%- if child.type == 'bold' %}
               <span class="bold">{{ child.content }}</span>
               {%- endif %}
@@ -228,7 +228,7 @@
             {%- if sub3section.type == "paragraph" %}
             <div class="paragraph">
               <p>
-              {%- for child in sub3section.children %}
+              {%- for child in sub3section.parts %}
                 {%- if child.type == 'bold' %}
                 <span class="bold">{{ child.content }}</span>
                 {%- endif %}
@@ -262,7 +262,7 @@
               {%- if sub4section.type == "paragraph" %}
               <div class="paragraph">
                 <p>
-                {%- for child in sub4section.children %}
+                {%- for child in sub4section.parts %}
                   {%- if child.type == 'bold' %}
                   <span class="bold">{{ child.content }}</span>
                   {%- endif %}
@@ -293,7 +293,7 @@
                 {%- if sub5section.type == "paragraph" %}
                 <div class="paragraph">
                   <p>
-                  {%- for child in sub5section.children %}
+                  {%- for child in sub5section.parts %}
                     {%- if child.type == 'bold' %}
                     <span class="bold">{{ child.content }}</span>
                     {%- endif %}
@@ -324,7 +324,7 @@
                   {%- if sub6section.type == "paragraph" %}
                   <div class="paragraph">
                     <p>
-                    {%- for child in sub6section.children %}
+                    {%- for child in sub6section.parts %}
                       {%- if child.type == 'bold' %}
                       <span class="bold">{{ child.content }}</span>
                       {%- endif %}

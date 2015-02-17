@@ -88,7 +88,7 @@ def create_latex_node(content, root_key, child_index):
     equation_indicator = ['$$', '\\[', '\\begin{equation}', '\\begin{align}']
     for indicator in equation_indicator:
         if indicator in content[0]:
-                type = 'equation'
+            type = 'equation'
     # If the content is a list:
     if is_valid_list(content):
         if str_strip(content[0], '\\begin{', '}') == 'enumerate':
