@@ -83,12 +83,15 @@ yihannote.onRemoveNodeClick = function() {
 yihannote.editFormNewChild = function(node, child_index) {
     var new_child = {};
     new_child.key = 'new_key';
-    new_child.parent_key = node.old_key;
+    if (node.old_key === 'noteBody')
+        new_child.parent_key = '';
+    else
+        new_child.parent_key = node.old_key;
     new_child.content = '';
     new_child.child_index = child_index;
     if (node.type === 'title') {
         new_child.type = 'title';
-    } else if (node.type === 'list' || node.type == 'ordered_list') {
+    } else if (node.type === 'list' || node.type === 'ordered_list') {
         new_child.type = 'list_item';
     } else 
         new_child.type = 'paragraph';
@@ -98,12 +101,15 @@ yihannote.editFormNewChild = function(node, child_index) {
 yihannote.editFormUpdateNode = function(index) {
     if (index === -1) return;
     var node = yihannote.editFormActiveNodes[index];
-    node.content = document.getElementById('editFormContent').value;
     var types = ['title', 'equation', 'paragraph', 'list', 'ordered_list', 'list_item'];
     for (var i = 0; i < types.length; i++ )
     if (document.getElementById('editFormType_' + types[i]).checked)
         node.type = types[i];
-    yihannote.resetNodeHierarchy();
+    var new_content = document.getElementById('editFormContent').value;
+    if (node.content !== new_content) {
+        node.content = new_content;
+        yihannote.resetNodeHierarchy();
+    }
 };
 
 yihannote.selectNode = function(index) {
@@ -114,6 +120,8 @@ yihannote.selectNode = function(index) {
     var types = ['title', 'equation', 'paragraph', 'list', 'ordered_list', 'list_item'];
     var disabled = false;
     if (node.type === 'title' && node.old_key !== 'new_key')
+        disabled = true;
+    if (yihannote.editKey === 'noteBody' && node.parent_key === '')
         disabled = true;
     for (var i = 0; i < types.length; i++ ) {
         document.getElementById('editFormType_' + types[i]).checked = false;
@@ -129,6 +137,7 @@ yihannote.expandNode = function(node) {
     var ajaxResponseHandler = function() {
         if (this.readyState === 4 && this.status === 200) {
             var response = JSON.parse(this.responseText);
+            if (response.children.length === 0) return;
             for (var i = 0; i < response.children.length; i++) {
                 yihannote.editFormAddNode(response.children[i]);
             }
@@ -218,8 +227,12 @@ yihannote.editFormUpdateKey = function(nodes) {
                 index ++;
             suffix += index;
         }
-        node.parent_key = active_list[parent_list[nodes[i]]].key
+        node.parent_key = active_list[parent_list[nodes[i]]].key;
         var new_key = node.parent_key + suffix;
+        if (node.parent_key === 'noteBody') {
+            node.parent_key = '';
+            new_key = 'Sec ' + node.child_index;
+        }
         node.key = new_key;
     }
 };
@@ -262,8 +275,6 @@ yihannote.fillNodeHierarchy = function(root, depth, lastChild) {
     nodeContent.className = '';
     if (node.deleted)
         nodeContent.className += 'deleted';
-    if (yihannote.selectedNode === root)
-        nodeContent.className += ' selected';
 
     var click_event = function() {
         yihannote.selectNode(root);
@@ -350,6 +361,8 @@ yihannote.editFormAddNode = function(node) {
                 yihannote.parentNode.push(i);
         if (node.key === yihannote.editKey)
             yihannote.parentNode.push(-1);
+        else if (yihannote.editKey === 'noteBody' && node.parent_key === '')
+            yihannote.parentNode.push(0);
     }
 };
 
@@ -368,6 +381,7 @@ yihannote.initEditForm = function(response) {
 yihannote.onNoteBodyClick = function(event) {
     var targetNode = event.target;
     while (!targetNode.id || targetNode.className !== 'section sec-title') {
+        if (targetNode.id === 'noteBody') break;
         targetNode = targetNode.parentNode;
     }
 
@@ -386,6 +400,7 @@ yihannote.onNoteBodyClick = function(event) {
         req.onreadystatechange = ajaxResponseHandler;
         req.send();
     } else if (yihannote.mode === 'latex') {
+        if (targetNode.id === 'noteBody') return;
         var ajaxResponseHandler = function() {
             if (this.readyState === 4 && this.status === 200) {
                 yihannote.changeMode('inLatex');

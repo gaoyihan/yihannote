@@ -129,8 +129,12 @@ class MainPage(webapp2.RequestHandler):
 class NodeInfo(webapp2.RequestHandler):
     def get(self):
         key = self.request.get('key')
-        node = datastore.get_entries([key])[0]
-        children = datastore.get_child_of_entry(key)
+        if key == 'noteBody':
+            node = datastore.Entry('noteBody', '', 'Note Body', 'title', 1)
+            children = datastore.get_child_of_entry('')
+        else:
+            node = datastore.get_entries([key])[0]
+            children = datastore.get_child_of_entry(key)
         def to_dict(node):
             return {
                 'key': node.key,
@@ -151,14 +155,16 @@ class EditEntry(webapp2.RequestHandler):
             self.redirect('/')
         nodes = json.loads(self.request.body)
         # We need this key set to find implicitly updated subtrees
-        old_key_set = set();
+        old_key_set = set()
         for node in nodes:
-            old_key_set.add(node['old_key']);
+            old_key_set.add(node['old_key'])
 
         update_list = []
         delete_list = []
         for node in nodes:
             old_key = node['old_key']
+            if old_key == 'noteBody':
+                continue
             key = node['key']
             children = datastore.get_child_of_entry(old_key)
             for child in children:

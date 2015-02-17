@@ -100,8 +100,9 @@ div#nodeContainer button.deleted {
   background-color: grey;
 }
 
-div#nodeContainer button.selected {
-  border: 2px solid red;
+div#nodeContainer button:focus {
+  border: 3px solid red;
+  outline: none;
 }
 
 div#nodeContainer img {
