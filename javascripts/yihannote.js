@@ -356,13 +356,18 @@ yihannote.editFormAddNode = function(node) {
         node.old_key = node.key;
         node.deleted = false;
         yihannote.editFormActiveNodes.push(node);
-        for (var i = 0; i < active_list.length; i++)
-            if (node.parent_key === active_list[i].old_key)
-                yihannote.parentNode.push(i);
-        if (node.key === yihannote.editKey)
+        if (node.parent_key === 'new_key') {
+            yihannote.parentNode.push(yihannote.selectedNode);
+        } else if (node.key === yihannote.editKey) {
             yihannote.parentNode.push(-1);
-        else if (yihannote.editKey === 'noteBody' && node.parent_key === '')
+        } else if (yihannote.editKey === 'noteBody' && node.parent_key === '') {
             yihannote.parentNode.push(0);
+        } else {
+            for (var i = 0; i < active_list.length; i++)
+                if (node.parent_key === active_list[i].old_key)
+                    yihannote.parentNode.push(i);
+        }
+
     }
 };
 
