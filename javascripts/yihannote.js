@@ -223,7 +223,8 @@ yihannote.editFormUpdateKey = function(nodes) {
             var index = 1;
             for (var j = 0; j < nodes.length; j++ )
             if (active_list[nodes[j]].type === 'title' &&
-                active_list[nodes[j]].child_index < node.child_index)
+                active_list[nodes[j]].child_index < node.child_index &&
+                !active_list[nodes[j]].deleted)
                 index ++;
             suffix += index;
         }
