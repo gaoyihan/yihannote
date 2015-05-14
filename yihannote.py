@@ -4,6 +4,7 @@ import os
 import urllib
 
 from google.appengine.api import users
+from google.appengine.ext import db
 
 import jinja2
 import webapp2
@@ -150,6 +151,7 @@ class NodeInfo(webapp2.RequestHandler):
         self.response.write(json.dumps(json_object))
 
 class EditEntry(webapp2.RequestHandler):
+    @db.transactional
     def post(self):
         if not users.is_current_user_admin():
             self.redirect('/')
@@ -210,6 +212,7 @@ class LatexContent(webapp2.RequestHandler):
         self.response.write(json.dumps(json_object))
 
 class LatexPost(webapp2.RequestHandler):
+    @db.transactional
     def post(self):
         if not users.is_current_user_admin():
             self.redirect('/')
