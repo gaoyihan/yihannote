@@ -5,8 +5,14 @@
     <title>Deposit Note</title>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <script type="text/javascript" src="javascripts/yihannote.js" async></script>
-    <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
-    <script type="text/javascript">LatexIT.add('p',true);</script>
+    <script type="text/javascript"
+        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+    });
+    </script>
   </head>
   <body onkeydown="yihannote.onKeyDown(event)">
   <div id="bodyWrapper">
